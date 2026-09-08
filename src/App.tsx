@@ -11,9 +11,8 @@ import { CommunityTestimonials } from './components/CommunityTestimonials';
 import { FooterSection } from './components/FooterSection';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { CartDrawer } from './components/CartDrawer';
-import { StrategyDossierModal } from './components/StrategyDossierModal';
 import { toggleAmbientSound, isAmbientPlaying } from './utils/soundSynthesizer';
-import { CheckCircle2, X, Sparkles, BookOpen } from 'lucide-react';
+import { CheckCircle2, X, Sparkles } from 'lucide-react';
 
 export default function App() {
   // Cart state with localStorage
@@ -32,7 +31,6 @@ export default function App() {
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isDossierOpen, setIsDossierOpen] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [showCheckoutSuccess, setShowCheckoutSuccess] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -120,23 +118,10 @@ export default function App() {
         </div>
       )}
 
-      {/* Floating Fast Strategy Badge on Desktop bottom-left */}
-      <aside aria-label="Acesso rápido ao dossiê" className="fixed bottom-6 left-6 z-40 hidden xl:flex">
-        <button
-          onClick={() => setIsDossierOpen(true)}
-          className="group flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#18231B]/90 hover:bg-[#223125] backdrop-blur-md border border-[#C28C4B]/50 hover:border-[#C28C4B] text-xs text-[#F1ECE1] shadow-xl transition-all cursor-pointer"
-        >
-          <BookOpen className="w-4 h-4 text-[#C28C4B] group-hover:scale-110 transition-transform" />
-          <span className="font-semibold">Ver Dossiê Estratégico (UX/Copy)</span>
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-        </button>
-      </aside>
-
       {/* Main Navbar */}
       <Navbar
         cartItems={cartItems}
         onOpenCart={() => setIsCartOpen(true)}
-        onOpenDossier={() => setIsDossierOpen(true)}
         isAudioPlaying={isAudioPlaying}
         onToggleAudio={handleToggleAudio}
       />
@@ -191,12 +176,6 @@ export default function App() {
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onCheckout={handleCheckout}
-      />
-
-      {/* Senior Web Designer & Conversion Strategist Dossier */}
-      <StrategyDossierModal
-        isOpen={isDossierOpen}
-        onClose={() => setIsDossierOpen(false)}
       />
 
       {/* Checkout Simulator Modal */}

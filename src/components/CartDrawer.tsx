@@ -200,13 +200,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
               {/* Direct WhatsApp Ordering */}
               <a
-                href={`https://wa.me/5511999999999?text=${generateWhatsAppMessage()}`}
+                href={`https://wa.me/558100000000?text=${generateWhatsAppMessage()}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full min-h-[44px] py-2.5 rounded-xl bg-[#172019] hover:bg-[#202D23] text-[#D8CFBF] hover:text-[#F1ECE1] border border-[#2B3B2F] font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="truncate">Finalizar ou Pedir Apoio no WhatsApp</span>
+                <span className="truncate">Finalizar ou Pedir Apoio no WhatsApp (81 0000-0000)</span>
               </a>
 
               {/* Micro-trust guarantee */}

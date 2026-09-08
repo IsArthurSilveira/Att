@@ -85,19 +85,19 @@ export const CommunityTestimonials: React.FC = () => {
                 Deseja orientação antes de escolher seu instrumento?
               </h3>
               <p className="text-xs sm:text-sm text-[#A69986] mt-0.5">
-                Converse diretamente com os facilitadores da Casa. Estamos aqui para acolher sua busca com carinho e seriedade.
+                Converse diretamente com os facilitadores da Casa em Recife, Pernambuco. Estamos aqui para acolher sua busca com carinho e seriedade pelo WhatsApp: 81 0000-0000.
               </p>
             </div>
           </div>
 
           <a
-            href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20gostaria%20de%20tirar%20uma%20d%C3%BAvida%20sobre%20os%20instrumentos%20e%20medicinas%20da%20Casa."
+            href="https://wa.me/558100000000?text=Ol%C3%A1%2C%20gostaria%20de%20tirar%20uma%20d%C3%BAvida%20sobre%20os%20instrumentos%20e%20medicinas%20da%20Casa."
             target="_blank"
             rel="noopener noreferrer"
             className="w-full md:w-auto px-6 py-3.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs sm:text-sm whitespace-nowrap shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer min-h-[48px]"
           >
             <MessageCircle className="w-4 h-4" />
-            <span>Falar com o Apoio da Casa</span>
+            <span>Falar no WhatsApp (81 0000-0000)</span>
           </a>
         </div>
 

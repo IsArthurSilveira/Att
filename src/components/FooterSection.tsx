@@ -89,18 +89,25 @@ export const FooterSection: React.FC = () => {
             <div className="space-y-2.5 text-xs text-[#8C8070]">
               <div className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-[#C28C4B] shrink-0 mt-0.5" />
-                <span>Sede Campestre: Serra da Cantareira / SP</span>
+                <span>Sede & Espaço Ritual: Recife, Pernambuco</span>
               </div>
               <div className="flex items-start gap-2">
                 <MessageCircle className="w-3.5 h-3.5 text-[#C28C4B] shrink-0 mt-0.5" />
-                <span>WhatsApp: (11) 99887-1432</span>
+                <a
+                  href="https://wa.me/558100000000"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#F1ECE1] transition-colors"
+                >
+                  WhatsApp: 81 0000-0000
+                </a>
               </div>
               <div className="flex items-start gap-2">
                 <Mail className="w-3.5 h-3.5 text-[#C28C4B] shrink-0 mt-0.5" />
                 <span>contato@armazemdafloresta.org</span>
               </div>
               <p className="text-[11px] text-[#6D6354] pt-1">
-                * Visitas e vivências cerimoniais mediante agendamento prévio com a secretaria da Casa.
+                * Visitas e vivências cerimoniais em Recife mediante agendamento prévio com a secretaria da Casa.
               </p>
             </div>
           </div>

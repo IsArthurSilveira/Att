@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Volume2, VolumeX, ShoppingBag, BookOpen, Menu, X, Sparkles, ShieldCheck, Heart } from 'lucide-react';
+import { Volume2, VolumeX, ShoppingBag, Menu, X, Sparkles, ShieldCheck, Heart } from 'lucide-react';
 import { CartItem } from '../types';
 
 interface NavbarProps {
   cartItems: CartItem[];
   onOpenCart: () => void;
-  onOpenDossier: () => void;
   isAudioPlaying: boolean;
   onToggleAudio: () => void;
 }
@@ -13,7 +12,6 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   cartItems,
   onOpenCart,
-  onOpenDossier,
   isAudioPlaying,
   onToggleAudio
 }) => {
@@ -125,18 +123,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </button>
 
-          {/* Designer Strategy Dossier Button - compact on mobile, expanded on tablet/desktop */}
-          <button
-            id="dossier-modal-btn"
-            onClick={onOpenDossier}
-            title="Ver Dossiê Estratégico (UX/Copy)"
-            className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-semibold bg-[#212C23] hover:bg-[#2B3B2F] text-[#E2D6C0] border border-[#C28C4B]/50 hover:border-[#C28C4B] transition-all cursor-pointer shadow-sm min-h-[38px]"
-          >
-            <BookOpen className="w-3.5 h-3.5 text-[#C28C4B]" />
-            <span className="font-sans-clean hidden md:inline">Dossiê Estratégico</span>
-            <span className="font-sans-clean md:hidden">Dossiê</span>
-          </button>
-
           {/* Cart / Sacola de Reza Button */}
           <button
             id="cart-drawer-btn"
@@ -196,19 +182,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="text-left text-[#D8CFBF] hover:text-[#C28C4B] py-2.5 px-3 rounded-xl hover:bg-[#18231B] transition-colors"
             >
               Depoimentos de Buscadores
-            </button>
-          </div>
-
-          <div className="pt-2 border-t border-[#233226] flex flex-col gap-2">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenDossier();
-              }}
-              className="w-full py-3 px-4 rounded-xl bg-[#212C23] border border-[#C28C4B] text-[#F1ECE1] text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer shadow"
-            >
-              <BookOpen className="w-4 h-4 text-[#C28C4B]" />
-              <span>Abrir Dossiê Estratégico (UX/Copy)</span>
             </button>
           </div>
         </div>

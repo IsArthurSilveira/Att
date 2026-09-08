@@ -165,7 +165,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: 't1',
     name: 'Carolina Mendonça',
     role: 'Buscadora e Terapeuta Integrativa',
-    location: 'São Paulo, SP',
+    location: 'Recife, PE',
     text: 'A firmeza que senti ao segurar o kuripe de Pau-Rosa é inexplicável. Dá para perceber que não é um produto de prateleira fria; carrega a oração viva da floresta. Meu espaço de meditação se transformou completamente.',
     purchasedItem: 'Kuripe Sagrado com Grafismo Kenê',
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
