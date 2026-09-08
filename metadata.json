@@ -1,0 +1,6 @@
+{
+  "name": "Armazém da Floresta Sagrada",
+  "description": "Landing page de alta conversão e experiência ritualística para loja ligada a centro de Ayahuasca, com artesanatos indígenas, rapés, defumações e guia estratégico de UX/Copy.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
