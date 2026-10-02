@@ -1,7 +1,7 @@
 export interface Product {
   id: string;
   name: string;
-  category: 'rapes' | 'defumacoes' | 'instrumentos' | 'tecidos' | 'arte' | 'kits';
+  category: 'sopro' | 'medicinas' | 'velas' | 'ervas' | 'artes' | 'terapias' | string;
   categoryLabel: string;
   price: number;
   originalPrice?: number;
@@ -21,25 +21,4 @@ export interface Product {
 export interface CartItem {
   product: Product;
   quantity: number;
-}
-
-export interface Testimonial {
-  id: string;
-  name: string;
-  role: string;
-  location: string;
-  text: string;
-  purchasedItem: string;
-  avatarUrl: string;
-  rating: number;
-  date: string;
-}
-
-export interface StrategySection {
-  id: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  details: string[];
-  keyTakeaway: string;
 }

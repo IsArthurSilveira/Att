@@ -28,7 +28,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   // Generate pre-filled WhatsApp message
   const generateWhatsAppMessage = () => {
-    let msg = 'Olá, equipe da Casa! Gostaria de encomendar os seguintes itens sagrados do Armazém:\n\n';
+    let msg = 'Olá, equipe Religare! Gostaria de concluir o pedido dos seguintes itens:\n\n';
     items.forEach(i => {
       msg += `• ${i.quantity}x ${i.product.name} (R$ ${(i.product.price * i.quantity).toFixed(2)})\n`;
     });
@@ -50,15 +50,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           {/* Header */}
           <div className="p-4 sm:p-6 border-b border-[#233226] flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-lg bg-[#18231B] border border-[#C28C4B]/40 text-[#C28C4B]">
-                <Heart className="w-4 h-4" />
+              <div className="w-9 h-9 rounded-full overflow-hidden border border-[#C28C4B]/60 shadow-sm shrink-0">
+                <img src="/religare-logo.jpg" alt="Religare" className="w-full h-full object-cover" />
               </div>
               <div>
                 <h3 className="font-cinzel text-sm sm:text-base font-bold text-[#F1ECE1]">
-                  Sua Sacola Ritual
+                  Sacola Religare
                 </h3>
                 <p className="text-[10px] sm:text-[11px] text-[#A69986]">
-                  {items.length} {items.length === 1 ? 'item sagrado' : 'itens sagrados'}
+                  {items.length} {items.length === 1 ? 'item selecionado' : 'itens selecionados'}
                 </p>
               </div>
             </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CATEGORIES, PRODUCTS } from '../data/products';
 import { Product } from '../types';
-import { Sparkles, Eye, Plus, Check, Star, Search, ShieldCheck } from 'lucide-react';
+import { Sparkles, Eye, Plus, Check, Star, Search } from 'lucide-react';
 
 interface CategoriesSectionProps {
   onSelectProduct: (product: Product) => void;
@@ -35,58 +35,60 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   };
 
   return (
-    <section id="catalogo" className="py-14 sm:py-20 md:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="catalogo" className="pt-2 pb-12 sm:pt-4 sm:pb-16 md:pt-6 md:pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6 mb-8 sm:mb-12">
-        <div className="space-y-2 sm:space-y-3 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#18231B] border border-[#C28C4B]/40 text-[#C28C4B] text-[11px] sm:text-xs font-semibold uppercase tracking-wider">
-            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            <span>Curadoria Sagrada da Casa</span>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div className="space-y-2 max-w-2xl">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 rounded-full bg-[#18231B] border border-[#DFB168]/50 text-[#DFB168] text-[11px] sm:text-xs font-semibold uppercase tracking-wider">
+            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#DFB168]" />
+            <span>Curadoria Religare • Liderança 100% Feminina</span>
           </div>
-          <h2 className="font-cinzel text-2xl xs:text-3xl sm:text-4xl font-bold text-[#F1ECE1]">
-            Medicinas, Artes e Ferramentas de Reza
+          <h2 className="font-cinzel text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold text-[#F1ECE1] leading-tight">
+            Medicinas, Instrumentos & Cuidados da Floresta
           </h2>
-          <p className="text-[#A69986] text-xs sm:text-sm md:text-base font-sans-clean">
-            Instrumentos preparados com intenção pura, respeito aos ciclos lunares e matérias-primas botânicas 100% autênticas da Amazônia e cerrados sagrados.
+          <p className="text-[#A69986] text-xs sm:text-sm md:text-base font-sans-clean leading-relaxed">
+            Curadoria da 1ª casa do Brasil com direção 100% feminina: Tepis e Kuripes com a Sopro Imperial, rapés ancestrais, sananga viva, velas da Lumiar, ervas de Tuana Flores e terapias integrativas.
           </p>
         </div>
 
         {/* Live Search Input */}
-        <div className="relative w-full md:w-72 shrink-0">
+        <div className="relative w-full md:w-80 shrink-0">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#A69986]" />
           <input
             type="text"
-            placeholder="Buscar medicina, planta ou aldeia..."
+            placeholder="Buscar por medicina, planta, aldeia..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#141B16] border border-[#233226] focus:border-[#C28C4B] text-sm text-[#F1ECE1] placeholder-[#736A5D] focus:outline-none transition-colors min-h-[44px]"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#141B16] border border-[#233226] focus:border-[#C28C4B] text-xs sm:text-sm text-[#F1ECE1] placeholder-[#736A5D] focus:outline-none transition-colors min-h-[44px]"
           />
         </div>
       </div>
 
-      {/* Category Pills (Horizontal scrolling for mobile fluidity) */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 sm:mb-8 scrollbar-none touch-pan-x">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => setSelectedCategory(cat.id)}
-            className={`px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer min-h-[38px] flex items-center ${
-              selectedCategory === cat.id
-                ? 'bg-[#C28C4B] text-[#0E1310] shadow-md shadow-[#C28C4B]/20'
-                : 'bg-[#141B16] text-[#A69986] hover:text-[#F1ECE1] border border-[#233226] hover:border-[#384F3D]'
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
+      {/* Category Pills (Edge-to-edge scroll on mobile for superior touch responsiveness) */}
+      <div className="-mx-4 px-4 sm:mx-0 sm:px-0 mb-6 sm:mb-8">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none touch-pan-x">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setSelectedCategory(cat.id)}
+              className={`px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer min-h-[38px] flex items-center shrink-0 ${
+                selectedCategory === cat.id
+                  ? 'bg-[#C28C4B] text-[#0E1310] shadow-md shadow-[#C28C4B]/20'
+                  : 'bg-[#141B16] text-[#A69986] hover:text-[#F1ECE1] border border-[#233226] hover:border-[#384F3D]'
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Product Grid */}
       {filteredProducts.length === 0 ? (
         <div className="text-center py-12 sm:py-16 bg-[#141B16] rounded-2xl border border-[#233226] p-6 sm:p-8 space-y-3">
-          <p className="font-cinzel text-base sm:text-lg text-[#F1ECE1]">Nenhum instrumento encontrado para a busca.</p>
-          <p className="text-xs sm:text-sm text-[#A69986]">Tente buscar por termos como "Tsunu", "Kuripe", "Breu" ou "Altar".</p>
+          <p className="font-cinzel text-base sm:text-lg text-[#F1ECE1]">Nenhum produto encontrado para a busca.</p>
+          <p className="text-xs sm:text-sm text-[#A69986]">Tente buscar por termos como "Tsunu", "Kuripe", "Breu", "Vela" ou "Sananga".</p>
           <button
             onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
             className="mt-2 px-4 py-2 rounded-lg bg-[#233226] text-[#E0D7C6] text-xs font-semibold hover:bg-[#2F4434] cursor-pointer"
@@ -95,7 +97,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {filteredProducts.map((product) => {
             const isAdded = recentlyAddedId === product.id;
 
@@ -113,6 +115,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     src={product.imageUrl}
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#141B16] via-transparent to-black/30" />
 
@@ -124,29 +127,20 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     </span>
                   </div>
 
-                  {/* Featured ribbon */}
-                  {product.featured && (
-                    <div className="absolute top-3 right-3">
-                      <span className="bg-[#C28C4B] text-[#0E1310] text-[10px] font-bold px-2 py-0.5 rounded shadow">
-                        Consagrado
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Quick View Button on Image - accessible on mobile & hover on desktop */}
+                  {/* Quick view button overlay */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       onSelectProduct(product);
                     }}
-                    title="Ver rezo e detalhes"
-                    className="absolute bottom-3 right-3 p-2 rounded-xl bg-[#0E1310]/85 hover:bg-[#C28C4B] text-[#F1ECE1] hover:text-[#0E1310] border border-[#233226] transition-all opacity-90 sm:opacity-0 group-hover:opacity-100 shadow-md cursor-pointer"
+                    aria-label={`Ver detalhes de ${product.name}`}
+                    className="absolute bottom-3 right-3 p-2 rounded-full bg-[#0E1310]/85 border border-[#384F3D] text-[#D8CFBF] hover:text-[#C28C4B] transition-colors shadow-md backdrop-blur-sm cursor-pointer"
                   >
                     <Eye className="w-4 h-4" />
                   </button>
                 </div>
 
-                {/* Content */}
+                {/* Product Details */}
                 <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3 sm:space-y-4">
                   <div className="space-y-1.5 sm:space-y-2">
                     <div className="flex items-center justify-between text-[11px] text-[#C28C4B] font-semibold tracking-wider uppercase">
@@ -172,8 +166,8 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 
                   {/* Price & Add to Cart */}
                   <div className="pt-3 border-t border-[#233226] flex items-center justify-between gap-2">
-                    <div>
-                      <div className="flex items-baseline gap-1.5">
+                    <div className="min-w-0">
+                      <div className="flex items-baseline gap-1.5 flex-wrap">
                         <span className="text-base sm:text-lg font-bold font-mono text-[#F1ECE1]">
                           R$ {product.price.toFixed(2).replace('.', ',')}
                         </span>
@@ -183,7 +177,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                           </span>
                         )}
                       </div>
-                      <span className="text-[10px] text-[#8C8070] block">À vista ou em até 3x</span>
+                      <span className="text-[10px] text-[#8C8070] block truncate">À vista ou em até 3x</span>
                     </div>
 
                     <button
@@ -202,7 +196,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                       ) : (
                         <>
                           <Plus className="w-3.5 h-3.5" />
-                          <span>Consagrar</span>
+                          <span>Adicionar</span>
                         </>
                       )}
                     </button>
@@ -214,32 +208,6 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           })}
         </div>
       )}
-
-      {/* Altar kit promotional banner card (High conversion bundle) */}
-      <div className="mt-10 sm:mt-14 rounded-2xl p-5 sm:p-8 bg-gradient-to-r from-[#1A261D] via-[#141C16] to-[#241B14] border border-[#C28C4B]/40 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-5 sm:gap-6">
-        <div className="space-y-1.5 sm:space-y-2 text-center md:text-left">
-          <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs text-[#C28C4B] font-semibold tracking-wider uppercase">
-            <ShieldCheck className="w-4 h-4" />
-            <span>Kit Iniciação do Buscador</span>
-          </div>
-          <h3 className="font-cinzel text-lg xs:text-xl sm:text-2xl font-bold text-[#F1ECE1]">
-            Monte seu Altar Sagrado Completo com 15% de Benefício
-          </h3>
-          <p className="text-xs sm:text-sm text-[#A69986] max-w-xl">
-            Receba o conjunto consagrado com Kuripe de madeira nativa, Rapé Tsunu autêntico, Incensário de barro cozido, Resina de Breu Branco e o Guia de Orações da Casa.
-          </p>
-        </div>
-
-        <button
-          onClick={() => {
-            const kit = PRODUCTS.find(p => p.id === 'kit-altar-guardiao');
-            if (kit) onSelectProduct(kit);
-          }}
-          className="w-full md:w-auto px-6 py-3.5 rounded-xl bg-[#C28C4B] hover:bg-[#D49E5D] text-[#0E1310] font-bold text-xs sm:text-sm whitespace-nowrap shadow-lg transition-all cursor-pointer shrink-0 min-h-[46px] flex items-center justify-center text-center"
-        >
-          Conhecer o Kit do Altar
-        </button>
-      </div>
 
     </section>
   );

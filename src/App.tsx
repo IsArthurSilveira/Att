@@ -3,15 +3,10 @@ import { Product, CartItem } from './types';
 import { PRODUCTS } from './data/products';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
-import { PurposeSection } from './components/PurposeSection';
 import { CategoriesSection } from './components/CategoriesSection';
-import { EthicsTransparencySection } from './components/EthicsTransparencySection';
-import { RitualGuideSection } from './components/RitualGuideSection';
-import { CommunityTestimonials } from './components/CommunityTestimonials';
 import { FooterSection } from './components/FooterSection';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { CartDrawer } from './components/CartDrawer';
-import { toggleAmbientSound, isAmbientPlaying } from './utils/soundSynthesizer';
 import { CheckCircle2, X, Sparkles } from 'lucide-react';
 
 export default function App() {
@@ -23,7 +18,7 @@ export default function App() {
     } catch (e) {
       // ignore
     }
-    // Default initial sacred basket item for pleasant interactive onboarding
+    // Default initial cart item for immediate interactive onboarding
     return [
       { product: PRODUCTS[0], quantity: 1 }
     ];
@@ -31,7 +26,6 @@ export default function App() {
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [showCheckoutSuccess, setShowCheckoutSuccess] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -43,17 +37,6 @@ export default function App() {
       // ignore
     }
   }, [cartItems]);
-
-  const handleToggleAudio = () => {
-    toggleAmbientSound((playing) => {
-      setIsAudioPlaying(playing);
-      if (playing) {
-        showToast('🌿 Som sagrado ativado: Brisa, riacho e sino de oração.');
-      } else {
-        showToast('Som da mata pausado.');
-      }
-    });
-  };
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -74,7 +57,7 @@ export default function App() {
       }
       return [...prev, { product, quantity }];
     });
-    showToast(`✓ "${product.name}" foi acolhido na sua sacola de rezo.`);
+    showToast(`✓ "${product.name}" adicionado ao seu carrinho.`);
   };
 
   const handleUpdateQuantity = (productId: string, quantity: number) => {
@@ -122,40 +105,22 @@ export default function App() {
       <Navbar
         cartItems={cartItems}
         onOpenCart={() => setIsCartOpen(true)}
-        isAudioPlaying={isAudioPlaying}
-        onToggleAudio={handleToggleAudio}
       />
 
-      {/* Hero Section */}
+      {/* Main E-commerce View */}
       <main className="flex-1">
         <HeroSection
           onExploreCatalog={() => {
             const el = document.getElementById('catalogo');
             if (el) el.scrollIntoView({ behavior: 'smooth' });
           }}
-          onExplorePurpose={() => {
-            const el = document.getElementById('proposito');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
         />
-
-        {/* Purpose & Indigenous Alliance */}
-        <PurposeSection />
 
         {/* Featured Catalog & Interactive Categories */}
         <CategoriesSection
           onSelectProduct={(product) => setSelectedProduct(product)}
           onAddToCart={(product) => handleAddToCart(product)}
         />
-
-        {/* Ethics & Consecration Protocol */}
-        <EthicsTransparencySection />
-
-        {/* Altar Consecration Guide */}
-        <RitualGuideSection />
-
-        {/* Community Testimonials */}
-        <CommunityTestimonials />
       </main>
 
       {/* Footer Section */}
@@ -168,7 +133,7 @@ export default function App() {
         onAddToCart={(product, quantity) => handleAddToCart(product, quantity)}
       />
 
-      {/* Sacred Cart Drawer */}
+      {/* Cart Drawer */}
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
@@ -188,30 +153,40 @@ export default function App() {
             onClick={(e) => e.stopPropagation()}
             className="max-w-md w-full bg-[#141B16] border border-[#C28C4B] rounded-2xl sm:rounded-3xl p-5 sm:p-8 space-y-4 sm:space-y-5 text-center shadow-2xl"
           >
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#18231B] border border-[#C28C4B] text-[#C28C4B] mx-auto flex items-center justify-center">
-              <CheckCircle2 className="w-7 h-7 sm:w-8 sm:h-8 text-emerald-400" />
+            <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#C28C4B] mx-auto shadow-lg bg-[#18231B]">
+              <img src="/religare-logo.jpg" alt="Religare" className="w-full h-full object-cover" />
             </div>
 
             <div className="space-y-2">
               <h3 className="font-cinzel text-lg sm:text-xl font-bold text-[#F1ECE1]">
-                Rezo Recebido no Coração da Casa!
+                Pedido Recebido no Espaço Religare!
               </h3>
               <p className="text-xs sm:text-sm text-[#A69986] leading-relaxed">
-                Seu pedido foi pré-reservado. Em uma operação real, o comprador é direcionado para a chave PIX sagrada da cooperativa ou checkout seguro por cartão, com envio do comprovante pelo WhatsApp da Casa para receber a defumação personalizada antes do despacho.
+                Seu pedido foi registrado. Em uma operação real com gateway integrado, o pagamento é concluído via PIX instantâneo ou cartão de crédito com envio seguro para todo o Brasil.
               </p>
             </div>
 
-            <div className="p-3.5 sm:p-4 rounded-xl bg-[#0E1310] border border-[#233226] text-xs text-[#D8CFBF] space-y-1 text-left">
-              <p><strong>Embalagem:</strong> Kraft 100% reciclável com folhas secas de alfazema.</p>
-              <p><strong>Destino da Renda:</strong> Repasse direto às aldeias parceiras.</p>
-              <p><strong>Código de Rastreio:</strong> Enviado via e-mail e WhatsApp após a consagração no fogo.</p>
+            <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-[#111713] border border-[#233226] text-xs space-y-2">
+              <div className="flex justify-between text-[#A69986]">
+                <span>Status do Pedido:</span>
+                <span className="text-emerald-400 font-semibold">Aguardando Pagamento</span>
+              </div>
+              <div className="flex justify-between text-[#A69986]">
+                <span>Total de Itens:</span>
+                <span className="text-[#F1ECE1] font-mono">
+                  {cartItems.reduce((acc, item) => acc + item.quantity, 0)} unidade(s)
+                </span>
+              </div>
             </div>
 
             <button
-              onClick={() => setShowCheckoutSuccess(false)}
-              className="w-full min-h-[46px] py-3 rounded-xl bg-[#C28C4B] hover:bg-[#D49E5D] text-[#0E1310] font-bold text-xs sm:text-sm cursor-pointer shadow-md transition-all"
+              onClick={() => {
+                setShowCheckoutSuccess(false);
+                setCartItems([]);
+              }}
+              className="w-full py-3.5 rounded-xl bg-[#C28C4B] hover:bg-[#DFB168] text-[#0E1310] font-bold text-xs sm:text-sm tracking-wide transition-colors cursor-pointer min-h-[44px]"
             >
-              Retornar ao Armazém Sagrado
+              Concluir & Voltar à Loja Religare
             </button>
           </div>
         </div>
