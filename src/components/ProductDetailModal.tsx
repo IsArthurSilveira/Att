@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Product } from '../types';
-import { X, Star, ShieldCheck, Heart, Sparkles, MapPin, Feather, Check } from 'lucide-react';
+import { X, Star, ShieldCheck, Heart, Sparkles, MapPin, Feather, Check, MessageCircle } from 'lucide-react';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -174,6 +174,17 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 </>
               )}
             </button>
+
+            {/* Direct WhatsApp link for quick questions */}
+            <a
+              href={`https://wa.me/5581979149067?text=${encodeURIComponent(`Olá, equipe Religare! Gostaria de tirar uma dúvida sobre o item: ${product.name} (R$ ${product.price.toFixed(2).replace('.', ',')})`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[11px] text-[#A69986] hover:text-[#DFB168] transition-colors flex items-center justify-center gap-1.5 pt-1 text-center"
+            >
+              <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Dúvida sobre este feitio? Fale no WhatsApp: (81) 97914-9067</span>
+            </a>
           </div>
 
         </div>

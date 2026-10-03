@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CartItem } from '../types';
-import { X, Trash2, Plus, Minus, ShieldCheck, Heart, MessageCircle, ArrowRight, Sparkles } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ShieldCheck, MessageCircle, Sparkles } from 'lucide-react';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -19,6 +19,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onRemoveItem,
   onCheckout
 }) => {
+  const [customerName, setCustomerName] = useState('');
+  const [customerLocation, setCustomerLocation] = useState('');
+
   if (!isOpen) return null;
 
   const total = items.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
@@ -26,14 +29,38 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const progressToGift = Math.min(100, (total / giftThreshold) * 100);
   const remainingForGift = Math.max(0, giftThreshold - total);
 
-  // Generate pre-filled WhatsApp message
+  // Generate structured, pre-filled WhatsApp message for number 81979149067
   const generateWhatsAppMessage = () => {
-    let msg = 'Olá, equipe Religare! Gostaria de concluir o pedido dos seguintes itens:\n\n';
-    items.forEach(i => {
-      msg += `• ${i.quantity}x ${i.product.name} (R$ ${(i.product.price * i.quantity).toFixed(2)})\n`;
+    let msg = `🌿 *NOVO PEDIDO • RELIGARE* 🌿\n`;
+    msg += `_1ª Casa de Ayahuasca do Brasil 100% Dirigida por Mulheres_\n\n`;
+
+    if (customerName.trim()) {
+      msg += `👤 *Nome do Cliente:* ${customerName.trim()}\n`;
+    }
+    if (customerLocation.trim()) {
+      msg += `📍 *Cidade / CEP:* ${customerLocation.trim()}\n`;
+    }
+    if (customerName.trim() || customerLocation.trim()) {
+      msg += `\n`;
+    }
+
+    msg += `📦 *ITENS DA SACOLA:*\n`;
+    items.forEach((item, index) => {
+      const subtotal = (item.product.price * item.quantity).toFixed(2).replace('.', ',');
+      msg += `${index + 1}. *${item.product.name}*\n   ↳ Quantidade: ${item.quantity}x • Subtotal: R$ ${subtotal}\n`;
     });
-    msg += `\nTotal: R$ ${total.toFixed(2)}\nComo posso concluir o pagamento e envio?`;
+
+    msg += `\n💰 *VALOR TOTAL DOS ITENS:* R$ ${total.toFixed(2).replace('.', ',')}\n`;
+    msg += `📦 *Envio:* A calcular via Correios / Sedex / Transportadora\n\n`;
+    msg += `Olá, equipe Religare! Acabei de montar minha sacola no site e gostaria de concluir meu pedido. Poderiam me passar os dados para pagamento (PIX / Cartão) e o valor do frete? Gratidão! 🙏🌸`;
+
     return encodeURIComponent(msg);
+  };
+
+  const whatsappUrl = `https://wa.me/5581979149067?text=${generateWhatsAppMessage()}`;
+
+  const handleCheckoutClick = () => {
+    onCheckout();
   };
 
   return (
@@ -50,7 +77,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           {/* Header */}
           <div className="p-4 sm:p-6 border-b border-[#233226] flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full overflow-hidden border border-[#C28C4B]/60 shadow-sm shrink-0">
+              <div className="w-9 h-9 rounded-full overflow-hidden border border-[#DFB168]/70 shadow-sm shrink-0">
                 <img src="/religare-logo.jpg" alt="Religare" className="w-full h-full object-cover" />
               </div>
               <div>
@@ -75,13 +102,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           {/* Gift Progress Bar */}
           <div className="px-4 sm:px-6 py-2.5 sm:py-3 bg-[#18231B] border-b border-[#233226]">
             <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="text-[#C28C4B] font-semibold flex items-center gap-1 text-[11px] sm:text-xs">
+              <span className="text-[#DFB168] font-semibold flex items-center gap-1 text-[11px] sm:text-xs">
                 <Sparkles className="w-3.5 h-3.5" />
-                Presente Sagrado
+                Mimo da Floresta
               </span>
               <span className="text-[10px] sm:text-[11px] text-[#A69986]">
                 {total >= giftThreshold ? (
-                  <span className="text-emerald-400 font-bold">Amostra de Breu garantida!</span>
+                  <span className="text-emerald-400 font-bold">Resina de Breu Branco garantida!</span>
                 ) : (
                   <span>Faltam R$ {remainingForGift.toFixed(2).replace('.', ',')}</span>
                 )}
@@ -89,7 +116,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             </div>
             <div className="w-full h-1.5 rounded-full bg-[#0E1310] overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-[#8C5A3E] to-[#C28C4B] transition-all duration-300"
+                className="h-full bg-gradient-to-r from-[#8C5A3E] to-[#DFB168] transition-all duration-300"
                 style={{ width: `${progressToGift}%` }}
               />
             </div>
@@ -109,66 +136,92 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </button>
               </div>
             ) : (
-              items.map(({ product, quantity }) => (
-                <div
-                  key={product.id}
-                  className="p-3 sm:p-3.5 rounded-xl bg-[#0E1310] border border-[#233226] flex gap-3 items-center"
-                >
-                  <img
-                    src={product.imageUrl}
-                    alt={product.name}
-                    className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg object-cover border border-[#233226] shrink-0"
-                  />
+              <>
+                {items.map(({ product, quantity }) => (
+                  <div
+                    key={product.id}
+                    className="p-3 sm:p-3.5 rounded-xl bg-[#0E1310] border border-[#233226] flex gap-3 items-center"
+                  >
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg object-cover border border-[#233226] shrink-0"
+                    />
 
-                  <div className="flex-1 min-w-0 space-y-0.5 sm:space-y-1">
-                    <h4 className="font-cinzel text-xs font-bold text-[#F1ECE1] truncate">
-                      {product.name}
-                    </h4>
-                    <p className="text-[10px] text-[#C28C4B] truncate">
-                      {product.origin.split(',')[0]}
-                    </p>
-                    <div className="font-mono text-xs font-bold text-[#F1ECE1]">
-                      R$ {(product.price * quantity).toFixed(2).replace('.', ',')}
+                    <div className="flex-1 min-w-0 space-y-0.5 sm:space-y-1">
+                      <h4 className="font-cinzel text-xs font-bold text-[#F1ECE1] truncate">
+                        {product.name}
+                      </h4>
+                      <p className="text-[10px] text-[#DFB168] truncate">
+                        {product.origin.split(',')[0]}
+                      </p>
+                      <div className="font-mono text-xs font-bold text-[#F1ECE1]">
+                        R$ {(product.price * quantity).toFixed(2).replace('.', ',')}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-end gap-1.5 shrink-0">
+                      <button
+                        onClick={() => onRemoveItem(product.id)}
+                        className="text-[#6D6354] hover:text-red-400 transition-colors p-1 cursor-pointer"
+                        title="Remover da sacola"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+
+                      <div className="flex items-center border border-[#233226] rounded-md bg-[#141B16]">
+                        <button
+                          onClick={() => onUpdateQuantity(product.id, quantity - 1)}
+                          className="w-7 h-7 flex items-center justify-center text-xs text-[#A69986] hover:text-[#F1ECE1] cursor-pointer"
+                          aria-label="Diminuir quantidade"
+                        >
+                          <Minus className="w-3 h-3" />
+                        </button>
+                        <span className="px-1.5 text-xs font-mono font-bold text-[#F1ECE1]">
+                          {quantity}
+                        </span>
+                        <button
+                          onClick={() => onUpdateQuantity(product.id, quantity + 1)}
+                          className="w-7 h-7 flex items-center justify-center text-xs text-[#A69986] hover:text-[#F1ECE1] cursor-pointer"
+                          aria-label="Aumentar quantidade"
+                        >
+                          <Plus className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
                   </div>
+                ))}
 
-                  <div className="flex flex-col items-end gap-1.5 shrink-0">
-                    <button
-                      onClick={() => onRemoveItem(product.id)}
-                      className="text-[#6D6354] hover:text-red-400 transition-colors p-1 cursor-pointer"
-                      title="Remover da sacola"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-
-                    <div className="flex items-center border border-[#233226] rounded-md bg-[#141B16]">
-                      <button
-                        onClick={() => onUpdateQuantity(product.id, quantity - 1)}
-                        className="w-7 h-7 flex items-center justify-center text-xs text-[#A69986] hover:text-[#F1ECE1] cursor-pointer"
-                        aria-label="Diminuir quantidade"
-                      >
-                        <Minus className="w-3 h-3" />
-                      </button>
-                      <span className="px-1.5 text-xs font-mono font-bold text-[#F1ECE1]">
-                        {quantity}
-                      </span>
-                      <button
-                        onClick={() => onUpdateQuantity(product.id, quantity + 1)}
-                        className="w-7 h-7 flex items-center justify-center text-xs text-[#A69986] hover:text-[#F1ECE1] cursor-pointer"
-                        aria-label="Aumentar quantidade"
-                      >
-                        <Plus className="w-3 h-3" />
-                      </button>
-                    </div>
+                {/* Optional Customer Details for WhatsApp Message */}
+                <div className="mt-4 p-3 rounded-xl bg-[#0E1310] border border-[#233226] space-y-2">
+                  <div className="flex items-center justify-between text-[11px] text-[#DFB168] font-semibold">
+                    <span>Agilizar Envio no WhatsApp</span>
+                    <span className="text-[10px] text-[#7A7061] font-normal">opcional</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      placeholder="Seu nome"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      className="w-full px-2.5 py-1.5 rounded-lg bg-[#141B16] border border-[#2B3B2F] text-xs text-[#F1ECE1] placeholder-[#6D6354] focus:outline-none focus:border-[#DFB168]"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Sua cidade / CEP"
+                      value={customerLocation}
+                      onChange={(e) => setCustomerLocation(e.target.value)}
+                      className="w-full px-2.5 py-1.5 rounded-lg bg-[#141B16] border border-[#2B3B2F] text-xs text-[#F1ECE1] placeholder-[#6D6354] focus:outline-none focus:border-[#DFB168]"
+                    />
                   </div>
                 </div>
-              ))
+              </>
             )}
           </div>
 
-          {/* Footer with totals & Actions */}
+          {/* Footer Checkout via WhatsApp */}
           {items.length > 0 && (
-            <div className="p-4 sm:p-6 border-t border-[#233226] bg-[#0E1310] space-y-3 sm:space-y-4">
+            <div className="p-4 sm:p-5 border-t border-[#233226] bg-[#0E1310] space-y-3">
               
               <div className="space-y-1 text-xs text-[#A69986]">
                 <div className="flex items-center justify-between">
@@ -179,40 +232,37 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Envio Sagrado:</span>
-                  <span className="text-emerald-400 font-semibold text-[11px] sm:text-xs">Calculado na próxima etapa</span>
+                  <span className="text-emerald-400 font-semibold text-[11px]">Calculado via WhatsApp</span>
                 </div>
                 <div className="pt-1.5 border-t border-[#233226] flex items-center justify-between text-xs sm:text-sm font-bold text-[#F1ECE1]">
-                  <span>Total Previsto:</span>
-                  <span className="font-mono text-sm sm:text-base text-[#C28C4B]">
+                  <span>Total dos Produtos:</span>
+                  <span className="font-mono text-sm sm:text-base text-[#DFB168]">
                     R$ {total.toFixed(2).replace('.', ',')}
                   </span>
                 </div>
               </div>
 
-              {/* Checkout Primary */}
-              <button
-                onClick={onCheckout}
-                className="w-full min-h-[46px] py-3 rounded-xl bg-[#C28C4B] hover:bg-[#D49E5D] text-[#0E1310] font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
-              >
-                <span>Seguir para Pagamento Seguro</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-
-              {/* Direct WhatsApp Ordering */}
+              {/* Direct WhatsApp Checkout Button */}
               <a
-                href={`https://wa.me/558100000000?text=${generateWhatsAppMessage()}`}
+                href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full min-h-[44px] py-2.5 rounded-xl bg-[#172019] hover:bg-[#202D23] text-[#D8CFBF] hover:text-[#F1ECE1] border border-[#2B3B2F] font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+                onClick={handleCheckoutClick}
+                className="w-full min-h-[48px] py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-[#C28C4B] hover:brightness-110 text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-950/40 text-center"
               >
-                <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="truncate">Finalizar ou Pedir Apoio no WhatsApp (81 0000-0000)</span>
+                <MessageCircle className="w-4 h-4 fill-white shrink-0" />
+                <span>Concluir Pedido no WhatsApp</span>
               </a>
 
-              {/* Micro-trust guarantee */}
-              <div className="flex items-center justify-center gap-1.5 text-[10px] text-[#7A7061] text-center pt-0.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#C28C4B] shrink-0" />
-                <span>Embalagem 100% sem plástico e consagrada com defumação.</span>
+              {/* Number and direct support reassurance */}
+              <div className="text-[11px] text-[#A69986] text-center space-y-1 pt-0.5">
+                <p>
+                  Atendimento direto: <strong className="text-[#DFB168]">(81) 97914-9067</strong>
+                </p>
+                <div className="flex items-center justify-center gap-1 text-[10px] text-[#7A7061]">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#DFB168] shrink-0" />
+                  <span>Seu pedido abre no WhatsApp pronto para envio.</span>
+                </div>
               </div>
 
             </div>

@@ -14,8 +14,8 @@
 
   body {
     font-family: var(--font-sans);
-    background-color: #0E1310;
-    color: #F1ECE1;
+    background-color: #120D10;
+    color: #FAF4EB;
     overflow-x: hidden;
   }
 }
@@ -32,27 +32,31 @@
   font-family: var(--font-sans);
 }
 
-/* Custom subtle scrollbar */
+/* Custom delicate rose-gold scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0E1310;
+  background: #120D10;
 }
 ::-webkit-scrollbar-thumb {
-  background: #253329;
+  background: #36222B;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3A5240;
+  background: #E07563;
 }
 
-/* Forest ambient glow */
-.forest-glow {
-  background: radial-gradient(circle at 50% 20%, rgba(56, 94, 69, 0.22) 0%, rgba(14, 19, 16, 0) 70%);
+/* Sacred feminine ambient glows */
+.rose-glow {
+  background: radial-gradient(circle at 50% 20%, rgba(224, 117, 99, 0.22) 0%, rgba(18, 13, 16, 0) 70%);
 }
 
 .amber-glow {
-  background: radial-gradient(circle at 50% 50%, rgba(194, 140, 75, 0.15) 0%, rgba(14, 19, 16, 0) 70%);
+  background: radial-gradient(circle at 50% 50%, rgba(223, 177, 104, 0.18) 0%, rgba(18, 13, 16, 0) 70%);
+}
+
+.emerald-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(46, 99, 67, 0.20) 0%, rgba(18, 13, 16, 0) 70%);
 }

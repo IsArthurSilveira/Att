@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { MapPin, Mail, MessageCircle, ShieldCheck, Check, Send, ShoppingBag } from 'lucide-react';
+import { MapPin, Mail, MessageCircle, ShieldCheck, Check, Send, ShoppingBag, FileSpreadsheet } from 'lucide-react';
 
-export const FooterSection: React.FC = () => {
+interface FooterSectionProps {
+  onOpenSyncModal?: () => void;
+}
+
+export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenSyncModal }) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -80,6 +84,17 @@ export const FooterSection: React.FC = () => {
                   Vivências & Terapias Integrativas
                 </a>
               </li>
+              {onOpenSyncModal && (
+                <li className="pt-2 border-t border-[#1C261E]">
+                  <button
+                    onClick={onOpenSyncModal}
+                    className="hover:text-[#DFB168] transition-colors flex items-center gap-1.5 cursor-pointer text-[#8C8070] text-left"
+                  >
+                    <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>Gerenciar Produtos (Google Forms)</span>
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 
@@ -94,14 +109,14 @@ export const FooterSection: React.FC = () => {
                 <span>Envios para todo o Brasil • Casa de Cura</span>
               </div>
               <div className="flex items-start gap-2">
-                <MessageCircle className="w-3.5 h-3.5 text-[#C28C4B] shrink-0 mt-0.5" />
+                <MessageCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                 <a
-                  href="https://wa.me/558100000000"
+                  href="https://wa.me/5581979149067"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-[#F1ECE1] transition-colors"
                 >
-                  WhatsApp da Casa
+                  WhatsApp da Casa: (81) 97914-9067
                 </a>
               </div>
               <div className="flex items-start gap-2">

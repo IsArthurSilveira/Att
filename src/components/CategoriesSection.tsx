@@ -4,19 +4,28 @@ import { Product } from '../types';
 import { Sparkles, Eye, Plus, Check, Star, Search } from 'lucide-react';
 
 interface CategoriesSectionProps {
+  products: Product[];
+  selectedCategory: string;
+  onSelectCategory: (categoryId: string) => void;
   onSelectProduct: (product: Product) => void;
   onAddToCart: (product: Product) => void;
+  isUsingCustomSheet?: boolean;
+  onOpenSyncModal?: () => void;
 }
 
 export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
+  products,
+  selectedCategory,
+  onSelectCategory,
   onSelectProduct,
-  onAddToCart
+  onAddToCart,
+  isUsingCustomSheet,
+  onOpenSyncModal
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [recentlyAddedId, setRecentlyAddedId] = useState<string | null>(null);
 
-  const filteredProducts = PRODUCTS.filter((product) => {
+  const filteredProducts = products.filter((product) => {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
     const matchesSearch = 
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -40,9 +49,28 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-8">
         <div className="space-y-2 max-w-2xl">
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 rounded-full bg-[#18231B] border border-[#DFB168]/50 text-[#DFB168] text-[11px] sm:text-xs font-semibold uppercase tracking-wider">
-            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#DFB168]" />
-            <span>Curadoria Religare • Liderança 100% Feminina</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 rounded-full bg-[#18231B] border border-[#DFB168]/50 text-[#DFB168] text-[11px] sm:text-xs font-semibold uppercase tracking-wider">
+              <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#DFB168]" />
+              <span>Curadoria Religare • Liderança 100% Feminina</span>
+            </div>
+
+            {isUsingCustomSheet && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 text-[10px] font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Google Planilha Ativa</span>
+              </span>
+            )}
+
+            {onOpenSyncModal && (
+              <button
+                onClick={onOpenSyncModal}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#18231B] hover:bg-[#233226] border border-[#2B3B2F] hover:border-[#DFB168] text-[10px] text-[#A69986] hover:text-[#DFB168] transition-colors cursor-pointer"
+                title="Configurar integração com Google Planilhas & Forms"
+              >
+                <span>⚙️ Gerenciar Planilha</span>
+              </button>
+            )}
           </div>
           <h2 className="font-cinzel text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold text-[#F1ECE1] leading-tight">
             Medicinas, Instrumentos & Cuidados da Floresta
@@ -71,7 +99,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           {CATEGORIES.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
+              onClick={() => onSelectCategory(cat.id)}
               className={`px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer min-h-[38px] flex items-center shrink-0 ${
                 selectedCategory === cat.id
                   ? 'bg-[#C28C4B] text-[#0E1310] shadow-md shadow-[#C28C4B]/20'
@@ -90,7 +118,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           <p className="font-cinzel text-base sm:text-lg text-[#F1ECE1]">Nenhum produto encontrado para a busca.</p>
           <p className="text-xs sm:text-sm text-[#A69986]">Tente buscar por termos como "Tsunu", "Kuripe", "Breu", "Vela" ou "Sananga".</p>
           <button
-            onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
+            onClick={() => { onSelectCategory('all'); setSearchQuery(''); }}
             className="mt-2 px-4 py-2 rounded-lg bg-[#233226] text-[#E0D7C6] text-xs font-semibold hover:bg-[#2F4434] cursor-pointer"
           >
             Limpar filtros de busca

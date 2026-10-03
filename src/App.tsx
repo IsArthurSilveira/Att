@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Product, CartItem } from './types';
 import { PRODUCTS } from './data/products';
+import { fetchProductsFromSheet } from './services/sheetsService';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { CategoriesSection } from './components/CategoriesSection';
 import { FooterSection } from './components/FooterSection';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { CartDrawer } from './components/CartDrawer';
+import { SheetsSyncModal } from './components/SheetsSyncModal';
 import { CheckCircle2, X, Sparkles } from 'lucide-react';
 
 export default function App() {
+  // Live dynamic products list (default or loaded from Google Sheets)
+  const [products, setProducts] = useState<Product[]>(PRODUCTS);
+  const [sheetUrl, setSheetUrl] = useState<string>(() => {
+    try {
+      return localStorage.getItem('religare_sheet_url') || '';
+    } catch {
+      return '';
+    }
+  });
+  const [isUsingCustomSheet, setIsUsingCustomSheet] = useState<boolean>(false);
+  const [isSyncModalOpen, setIsSyncModalOpen] = useState<boolean>(false);
+
   // Cart state with localStorage
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     try {
@@ -25,9 +39,31 @@ export default function App() {
   });
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [showCheckoutSuccess, setShowCheckoutSuccess] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Attempt auto-sync from saved Google Sheet on startup
+  useEffect(() => {
+    try {
+      const savedUrl = localStorage.getItem('religare_sheet_url');
+      if (savedUrl) {
+        fetchProductsFromSheet(savedUrl)
+          .then((loadedProducts) => {
+            if (loadedProducts.length > 0) {
+              setProducts(loadedProducts);
+              setIsUsingCustomSheet(true);
+            }
+          })
+          .catch((err) => {
+            console.warn('Could not auto-load sheet products on startup:', err);
+          });
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, []);
 
   // Sync cart to localStorage
   useEffect(() => {
@@ -42,7 +78,31 @@ export default function App() {
     setToastMessage(msg);
     setTimeout(() => {
       setToastMessage(null);
-    }, 3500);
+    }, 4000);
+  };
+
+  const handleProductsLoaded = (newProducts: Product[], url: string) => {
+    setProducts(newProducts);
+    setSheetUrl(url);
+    setIsUsingCustomSheet(true);
+    try {
+      localStorage.setItem('religare_sheet_url', url);
+    } catch {
+      // ignore
+    }
+    showToast(`✨ ${newProducts.length} produtos carregados da sua Planilha Google!`);
+  };
+
+  const handleResetToDefault = () => {
+    setProducts(PRODUCTS);
+    setSheetUrl('');
+    setIsUsingCustomSheet(false);
+    try {
+      localStorage.removeItem('religare_sheet_url');
+    } catch {
+      // ignore
+    }
+    showToast('Catálogo padrão restaurado com sucesso.');
   };
 
   const handleAddToCart = (product: Product, quantity = 1) => {
@@ -57,7 +117,7 @@ export default function App() {
       }
       return [...prev, { product, quantity }];
     });
-    showToast(`✓ "${product.name}" adicionado ao seu carrinho.`);
+    showToast(`"${product.name}" adicionado à sacola.`);
   };
 
   const handleUpdateQuantity = (productId: string, quantity: number) => {
@@ -66,12 +126,15 @@ export default function App() {
       return;
     }
     setCartItems(prev =>
-      prev.map(item => item.product.id === productId ? { ...item, quantity } : item)
+      prev.map(item =>
+        item.product.id === productId ? { ...item, quantity } : item
+      )
     );
   };
 
   const handleRemoveItem = (productId: string) => {
     setCartItems(prev => prev.filter(item => item.product.id !== productId));
+    showToast('Item removido da sacola.');
   };
 
   const handleCheckout = () => {
@@ -85,9 +148,9 @@ export default function App() {
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-4 sm:bottom-6 left-3 sm:left-auto right-3 sm:right-6 z-50 animate-in slide-in-from-bottom-5 duration-300 max-w-md ml-auto">
-          <div className="bg-[#18231B] border border-[#C28C4B]/60 text-[#F1ECE1] px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-2xl shadow-2xl flex items-center justify-between gap-2.5 text-xs font-medium">
+          <div className="bg-[#18231B] border border-[#DFB168]/70 text-[#F1ECE1] px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-2xl shadow-2xl flex items-center justify-between gap-2.5 text-xs font-medium">
             <div className="flex items-center gap-2 min-w-0">
-              <Sparkles className="w-4 h-4 text-[#C28C4B] shrink-0" />
+              <Sparkles className="w-4 h-4 text-[#DFB168] shrink-0" />
               <span className="truncate">{toastMessage}</span>
             </div>
             <button
@@ -101,10 +164,15 @@ export default function App() {
         </div>
       )}
 
-      {/* Main Navbar */}
+      {/* Main Navbar with Category Index & Live Product Count */}
       <Navbar
         cartItems={cartItems}
         onOpenCart={() => setIsCartOpen(true)}
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+        products={products}
+        onOpenSyncModal={() => setIsSyncModalOpen(true)}
+        isUsingCustomSheet={isUsingCustomSheet}
       />
 
       {/* Main E-commerce View */}
@@ -118,13 +186,18 @@ export default function App() {
 
         {/* Featured Catalog & Interactive Categories */}
         <CategoriesSection
+          products={products}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
           onSelectProduct={(product) => setSelectedProduct(product)}
           onAddToCart={(product) => handleAddToCart(product)}
+          isUsingCustomSheet={isUsingCustomSheet}
+          onOpenSyncModal={() => setIsSyncModalOpen(true)}
         />
       </main>
 
       {/* Footer Section */}
-      <FooterSection />
+      <FooterSection onOpenSyncModal={() => setIsSyncModalOpen(true)} />
 
       {/* Product Detail Modal */}
       <ProductDetailModal
@@ -143,51 +216,84 @@ export default function App() {
         onCheckout={handleCheckout}
       />
 
-      {/* Checkout Simulator Modal */}
+      {/* Google Sheets & Forms Sync Modal */}
+      <SheetsSyncModal
+        isOpen={isSyncModalOpen}
+        onClose={() => setIsSyncModalOpen(false)}
+        onProductsLoaded={handleProductsLoaded}
+        onResetToDefault={handleResetToDefault}
+        currentSheetUrl={sheetUrl}
+        isUsingCustomSheet={isUsingCustomSheet}
+        productCount={products.length}
+      />
+
+      {/* Checkout WhatsApp Confirmation Modal */}
       {showCheckoutSuccess && (
         <div 
           onClick={() => setShowCheckoutSuccess(false)}
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="max-w-md w-full bg-[#141B16] border border-[#C28C4B] rounded-2xl sm:rounded-3xl p-5 sm:p-8 space-y-4 sm:space-y-5 text-center shadow-2xl"
+            className="max-w-md w-full bg-[#141B16] border border-[#DFB168]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 space-y-4 sm:space-y-5 text-center shadow-2xl"
           >
-            <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#C28C4B] mx-auto shadow-lg bg-[#18231B]">
+            <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#DFB168] mx-auto shadow-lg bg-[#18231B]">
               <img src="/religare-logo.jpg" alt="Religare" className="w-full h-full object-cover" />
             </div>
 
             <div className="space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 text-[11px] font-semibold">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Pedido Encaminhado ao WhatsApp</span>
+              </div>
               <h3 className="font-cinzel text-lg sm:text-xl font-bold text-[#F1ECE1]">
-                Pedido Recebido no Espaço Religare!
+                Atendimento Direto no WhatsApp
               </h3>
               <p className="text-xs sm:text-sm text-[#A69986] leading-relaxed">
-                Seu pedido foi registrado. Em uma operação real com gateway integrado, o pagamento é concluído via PIX instantâneo ou cartão de crédito com envio seguro para todo o Brasil.
+                Os itens da sua sacola foram formatados e abertos no WhatsApp oficial da Religare: <strong className="text-[#DFB168]">(81) 97914-9067</strong>.
+              </p>
+              <p className="text-[11px] text-[#8C8070] leading-relaxed">
+                Basta clicar em <strong>Enviar</strong> no WhatsApp para que nossa equipe feminina combine o frete e passe a chave PIX ou link de pagamento.
               </p>
             </div>
 
-            <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-[#111713] border border-[#233226] text-xs space-y-2">
+            <div className="p-3.5 rounded-xl bg-[#0E1310] border border-[#233226] text-xs space-y-2 text-left">
               <div className="flex justify-between text-[#A69986]">
-                <span>Status do Pedido:</span>
-                <span className="text-emerald-400 font-semibold">Aguardando Pagamento</span>
+                <span>Canal de Atendimento:</span>
+                <span className="text-emerald-400 font-semibold">(81) 97914-9067</span>
               </div>
               <div className="flex justify-between text-[#A69986]">
-                <span>Total de Itens:</span>
+                <span>Equipe Responsável:</span>
+                <span className="text-[#DFB168] font-semibold">Guiança 100% Feminina</span>
+              </div>
+              <div className="flex justify-between text-[#A69986]">
+                <span>Itens Reservados:</span>
                 <span className="text-[#F1ECE1] font-mono">
                   {cartItems.reduce((acc, item) => acc + item.quantity, 0)} unidade(s)
                 </span>
               </div>
             </div>
 
-            <button
-              onClick={() => {
-                setShowCheckoutSuccess(false);
-                setCartItems([]);
-              }}
-              className="w-full py-3.5 rounded-xl bg-[#C28C4B] hover:bg-[#DFB168] text-[#0E1310] font-bold text-xs sm:text-sm tracking-wide transition-colors cursor-pointer min-h-[44px]"
-            >
-              Concluir & Voltar à Loja Religare
-            </button>
+            <div className="space-y-2 pt-1">
+              <a
+                href="https://wa.me/5581979149067"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:brightness-110 text-white font-bold text-xs sm:text-sm tracking-wide transition-all cursor-pointer min-h-[44px] flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/40"
+              >
+                <span>Reabrir WhatsApp (81 97914-9067)</span>
+              </a>
+
+              <button
+                onClick={() => {
+                  setShowCheckoutSuccess(false);
+                  setCartItems([]);
+                }}
+                className="w-full py-3 rounded-xl bg-[#233226] hover:bg-[#2F4434] text-[#D8CFBF] font-semibold text-xs transition-colors cursor-pointer min-h-[40px]"
+              >
+                Limpar Sacola & Continuar Navegando
+              </button>
+            </div>
           </div>
         </div>
       )}

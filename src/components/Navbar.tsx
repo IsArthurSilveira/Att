@@ -1,163 +1,294 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Menu, X, Sparkles } from 'lucide-react';
-import { CartItem } from '../types';
+import { ShoppingBag, Menu, X, Sparkles, ChevronRight, Wind, Flame, Heart, Flower2, Music, Layers, FileSpreadsheet } from 'lucide-react';
+import { CartItem, Product } from '../types';
+import { CATEGORIES } from '../data/products';
 
 interface NavbarProps {
   cartItems: CartItem[];
   onOpenCart: () => void;
+  selectedCategory: string;
+  onSelectCategory: (categoryId: string) => void;
+  products: Product[];
+  onOpenSyncModal?: () => void;
+  isUsingCustomSheet?: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   cartItems,
-  onOpenCart
+  onOpenCart,
+  selectedCategory,
+  onSelectCategory,
+  products,
+  onOpenSyncModal,
+  isUsingCustomSheet
 }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-  const scrollToSection = (id: string) => {
-    setMobileMenuOpen(false);
-    const element = document.getElementById(id);
+  const handleCategoryClick = (categoryId: string) => {
+    onSelectCategory(categoryId);
+    setSidebarOpen(false);
+    const element = document.getElementById('catalogo');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
+  // Helper icon for each category
+  const getCategoryIcon = (id: string) => {
+    switch (id) {
+      case 'all':
+        return <Layers className="w-4 h-4 text-[#DFB168]" />;
+      case 'sopro':
+        return <Wind className="w-4 h-4 text-emerald-400" />;
+      case 'medicinas':
+        return <Flame className="w-4 h-4 text-[#DFB168]" />;
+      case 'velas':
+        return <Flame className="w-4 h-4 text-amber-300" />;
+      case 'ervas':
+        return <Flower2 className="w-4 h-4 text-emerald-300" />;
+      case 'artes':
+        return <Music className="w-4 h-4 text-rose-400" />;
+      case 'terapias':
+        return <Heart className="w-4 h-4 text-rose-300" />;
+      default:
+        return <Sparkles className="w-4 h-4 text-[#DFB168]" />;
+    }
+  };
+
+  // Helper description for each category
+  const getCategorySubtitle = (id: string) => {
+    switch (id) {
+      case 'all':
+        return 'Catálogo completo de medicinas e instrumentos';
+      case 'sopro':
+        return 'Tepis & kuripes em madeira e bambu • Sopro Imperial';
+      case 'medicinas':
+        return 'Rapés tradicionais lunares e sananga viva';
+      case 'velas':
+        return 'Cera 100% vegetal da alma • Lumiar';
+      case 'ervas':
+        return 'Defumações e resinas puras • Tuana Flores';
+      case 'artes':
+        return 'Maracás cerimoniais e artes sagradas dos guias';
+      case 'terapias':
+        return 'Círculos e vivências de acolhimento feminino';
+      default:
+        return '';
+    }
+  };
+
+  // Helper count of products in each category
+  const getCategoryCount = (id: string) => {
+    if (id === 'all') return products.length;
+    return products.filter(p => p.category === id).length;
+  };
+
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-[#0D130E]/95 border-b border-[#233226]">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2">
-        {/* Brand Identity with Religare Logo */}
-        <div 
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="flex items-center gap-2.5 sm:gap-3.5 cursor-pointer group min-w-0"
-          id="brand-logo"
-        >
-          <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#DFB168]/80 shadow-[0_0_14px_rgba(223,177,104,0.3)] group-hover:border-[#DFB168] transition-all shrink-0 bg-[#162119]">
-            <img 
-              src="/religare-logo.jpg" 
-              alt="Logo Religare" 
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-          <div className="min-w-0">
-            <div className="font-cinzel text-base xs:text-lg sm:text-xl md:text-2xl font-bold tracking-wider text-[#F1ECE1] group-hover:text-[#DFB168] transition-colors truncate">
-              RELIGARE
+    <>
+      <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-[#0D130E]/95 border-b border-[#233226]">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-3">
+          
+          {/* Brand Identity with Religare Logo */}
+          <div 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="flex items-center gap-2.5 sm:gap-3.5 cursor-pointer group min-w-0"
+            id="brand-logo"
+          >
+            <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#DFB168]/80 shadow-[0_0_14px_rgba(223,177,104,0.3)] group-hover:border-[#DFB168] transition-all shrink-0 bg-[#162119]">
+              <img 
+                src="/religare-logo.jpg" 
+                alt="Logo Religare" 
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+              />
             </div>
-            <p className="text-[9px] sm:text-[10px] text-[#DFB168] tracking-[0.14em] uppercase font-semibold truncate flex items-center gap-1">
-              <span>1ª Casa do Brasil 100% Dirigida por Mulheres</span>
-            </p>
+            <div className="min-w-0">
+              <div className="font-cinzel text-base xs:text-lg sm:text-xl md:text-2xl font-bold tracking-wider text-[#F1ECE1] group-hover:text-[#DFB168] transition-colors truncate">
+                RELIGARE
+              </div>
+              <p className="text-[9px] sm:text-[10px] text-[#DFB168] tracking-[0.14em] uppercase font-semibold truncate flex items-center gap-1">
+                <span>1ª Casa do Brasil 100% Dirigida por Mulheres</span>
+              </p>
+            </div>
+          </div>
+
+          {/* Action Controls in Right Corner: Store Button + Menu Button side by side */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+            
+            {/* Subtle Pill for Female Leadership on Desktop */}
+            <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#18231B] border border-[#DFB168]/30 text-[#DFB168] text-xs font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-[#DFB168]" />
+              <span>Liderança 100% Feminina</span>
+            </div>
+
+            {/* Store / Cart Button (Botão de Loja) */}
+            <button
+              id="cart-drawer-btn"
+              onClick={onOpenCart}
+              className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#18231B] border border-[#384F3D] hover:border-[#DFB168] text-[#F1ECE1] transition-all cursor-pointer min-h-[40px] shadow-sm group"
+              aria-label="Abrir Sacola de Compras"
+              title="Sacola de Compras"
+            >
+              <ShoppingBag className="w-4 h-4 text-[#DFB168] group-hover:scale-110 transition-transform" />
+              <span className="hidden sm:inline text-xs font-semibold text-[#E6DCB8]">Sacola</span>
+              {totalItems > 0 ? (
+                <span className="w-5 h-5 rounded-full bg-[#DFB168] text-[#0E1310] text-[11px] font-bold flex items-center justify-center shadow-md animate-bounce">
+                  {totalItems}
+                </span>
+              ) : (
+                <span className="hidden sm:inline-block text-[11px] text-[#8C8070] font-mono">0</span>
+              )}
+            </button>
+
+            {/* Menu / Sidebar / Index Button (Botãozinho de menu ao lado do botão de loja) */}
+            <button
+              id="categories-sidebar-btn"
+              onClick={() => setSidebarOpen(true)}
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#18231B] border border-[#384F3D] hover:border-[#DFB168] text-[#F1ECE1] transition-all cursor-pointer min-h-[40px] shadow-sm group"
+              aria-label="Abrir Índice de Categorias"
+              title="Índice de Categorias"
+            >
+              <Menu className="w-4 h-4 text-[#DFB168] group-hover:scale-110 transition-transform" />
+              <span className="hidden sm:inline text-xs font-semibold text-[#E6DCB8]">Categorias</span>
+            </button>
+
           </div>
         </div>
+      </header>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-5 lg:gap-7 text-sm text-[#D8CFBF]">
-          <button 
-            onClick={() => scrollToSection('catalogo')}
-            className="hover:text-[#DFB168] transition-colors font-medium cursor-pointer"
-          >
-            Todos os Produtos
-          </button>
-          <button 
-            onClick={() => scrollToSection('catalogo')}
-            className="hover:text-[#DFB168] transition-colors font-medium cursor-pointer"
-          >
-            Tepis & Kuripes
-          </button>
-          <button 
-            onClick={() => scrollToSection('catalogo')}
-            className="hover:text-[#DFB168] transition-colors font-medium cursor-pointer"
-          >
-            Rapés & Sananga
-          </button>
-          <button 
-            onClick={() => scrollToSection('catalogo')}
-            className="hover:text-[#DFB168] transition-colors font-medium cursor-pointer"
-          >
-            Velas & Defumações
-          </button>
-          <button 
-            onClick={() => scrollToSection('catalogo')}
-            className="hover:text-[#DFB168] transition-colors font-medium cursor-pointer"
-          >
-            Vivências & Terapias
-          </button>
-        </nav>
+      {/* Sidebar / Index Drawer for All Product Categories */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          {/* Backdrop */}
+          <div 
+            onClick={() => setSidebarOpen(false)}
+            className="absolute inset-0 bg-black/75 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
+          />
 
-        {/* Action Controls */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {/* Female leadership desktop pill */}
-          <div className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#18231B] border border-[#DFB168]/40 text-[#DFB168] text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5 text-[#DFB168]" />
-            <span>Liderança 100% Feminina</span>
-          </div>
+          <div className="fixed inset-y-0 right-0 max-w-full flex pl-6 sm:pl-10">
+            <div className="w-screen max-w-sm sm:max-w-md bg-[#131A15] border-l border-[#2B3B2F] shadow-2xl flex flex-col justify-between animate-in slide-in-from-right duration-300">
+              
+              {/* Sidebar Header */}
+              <div className="p-4 sm:p-5 border-b border-[#233226] bg-[#0E1310] flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full overflow-hidden border border-[#DFB168]/70 shadow-sm shrink-0">
+                    <img src="/religare-logo.jpg" alt="Religare" className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <h3 className="font-cinzel text-base font-bold text-[#F1ECE1]">
+                      Índice de Produtos
+                    </h3>
+                    <p className="text-[10px] text-[#DFB168] font-semibold tracking-wider uppercase">
+                      1ª Casa 100% Feminina
+                    </p>
+                  </div>
+                </div>
 
-          {/* Cart Button */}
-          <button
-            id="cart-drawer-btn"
-            onClick={onOpenCart}
-            className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#18231B] border border-[#384F3D] hover:border-[#DFB168] text-[#F1ECE1] transition-all cursor-pointer min-h-[38px] min-w-[38px]"
-            aria-label="Abrir Carrinho"
-          >
-            <ShoppingBag className="w-4 h-4 text-[#DFB168]" />
-            {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#DFB168] text-[#0E1310] text-[11px] font-bold flex items-center justify-center shadow-md animate-bounce">
-                {totalItems}
-              </span>
-            )}
-          </button>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  aria-label="Fechar índice"
+                  className="p-2 w-9 h-9 flex items-center justify-center rounded-lg text-[#A69986] hover:text-[#F1ECE1] hover:bg-[#1E2B21] transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-          {/* Mobile menu hamburger */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-[#D3C7B2] hover:text-white rounded-lg hover:bg-[#18231B] min-h-[40px] min-w-[40px] flex items-center justify-center"
-            aria-label="Menu"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-      </div>
+              {/* Sidebar Categories List */}
+              <div className="flex-1 overflow-y-auto p-3 sm:p-5 space-y-2">
+                <div className="px-2 pt-1 pb-2 text-[11px] font-bold text-[#8C8070] uppercase tracking-wider">
+                  Navegar por Categoria
+                </div>
 
-      {/* Mobile Drawer Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-[#111713] border-b border-[#233226] px-5 py-4 space-y-3 animate-in slide-in-from-top-3 duration-200">
-          <div className="p-2.5 rounded-xl bg-[#18231B] border border-[#DFB168]/40 text-xs text-[#DFB168] font-semibold flex items-center gap-2">
-            <Sparkles className="w-4 h-4 shrink-0 text-[#DFB168]" />
-            <span>1ª Casa do Brasil 100% Dirigida por Mulheres</span>
-          </div>
-          <div className="flex flex-col space-y-1 text-sm font-medium">
-            <button
-              onClick={() => scrollToSection('catalogo')}
-              className="text-left text-[#D8CFBF] hover:text-[#DFB168] py-2.5 px-3 rounded-xl hover:bg-[#18231B] transition-colors"
-            >
-              Todos os Produtos
-            </button>
-            <button
-              onClick={() => scrollToSection('catalogo')}
-              className="text-left text-[#D8CFBF] hover:text-[#DFB168] py-2.5 px-3 rounded-xl hover:bg-[#18231B] transition-colors"
-            >
-              Tepis & Kuripes (Sopro Imperial)
-            </button>
-            <button
-              onClick={() => scrollToSection('catalogo')}
-              className="text-left text-[#D8CFBF] hover:text-[#DFB168] py-2.5 px-3 rounded-xl hover:bg-[#18231B] transition-colors"
-            >
-              Rapés Tradicionais & Sananga
-            </button>
-            <button
-              onClick={() => scrollToSection('catalogo')}
-              className="text-left text-[#D8CFBF] hover:text-[#DFB168] py-2.5 px-3 rounded-xl hover:bg-[#18231B] transition-colors"
-            >
-              Velas Artesanais (Lumiar) & Flores (Tuana)
-            </button>
-            <button
-              onClick={() => scrollToSection('catalogo')}
-              className="text-left text-[#D8CFBF] hover:text-[#DFB168] py-2.5 px-3 rounded-xl hover:bg-[#18231B] transition-colors"
-            >
-              Vivências & Terapias Integrativas
-            </button>
+                {CATEGORIES.map((cat) => {
+                  const isSelected = selectedCategory === cat.id;
+                  const count = getCategoryCount(cat.id);
+                  const icon = getCategoryIcon(cat.id);
+                  const subtitle = getCategorySubtitle(cat.id);
+
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => handleCategoryClick(cat.id)}
+                      className={`w-full text-left p-3 rounded-xl transition-all cursor-pointer flex items-center justify-between gap-3 border ${
+                        isSelected
+                          ? 'bg-[#1D2920] border-[#DFB168] shadow-md shadow-[#DFB168]/10'
+                          : 'bg-[#0E1310]/70 hover:bg-[#18231B] border-[#233226] hover:border-[#384F3D]'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3 min-w-0">
+                        <div className={`p-2 rounded-lg mt-0.5 shrink-0 ${
+                          isSelected ? 'bg-[#DFB168]/20 border border-[#DFB168]/40' : 'bg-[#18231B] border border-[#2B3B2F]'
+                        }`}>
+                          {icon}
+                        </div>
+                        <div className="min-w-0">
+                          <div className={`font-cinzel text-xs sm:text-sm font-bold truncate ${
+                            isSelected ? 'text-[#DFB168]' : 'text-[#F1ECE1]'
+                          }`}>
+                            {cat.label}
+                          </div>
+                          {subtitle && (
+                            <div className="text-[11px] text-[#A69986] truncate mt-0.5">
+                              {subtitle}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-semibold ${
+                          isSelected
+                            ? 'bg-[#DFB168] text-[#0E1310]'
+                            : 'bg-[#1E2B21] text-[#A69986]'
+                        }`}>
+                          {count}
+                        </span>
+                        <ChevronRight className={`w-4 h-4 ${
+                          isSelected ? 'text-[#DFB168]' : 'text-[#6D6354]'
+                        }`} />
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Sidebar Footer Support & WhatsApp */}
+              <div className="p-4 sm:p-5 border-t border-[#233226] bg-[#0E1310] space-y-2.5">
+                {onOpenSyncModal && (
+                  <button
+                    onClick={() => {
+                      setSidebarOpen(false);
+                      onOpenSyncModal();
+                    }}
+                    className="w-full py-2.5 px-3 rounded-xl bg-[#141B16] hover:bg-[#1D271F] border border-[#2B3B2F] hover:border-[#DFB168]/50 text-xs font-semibold text-[#DFB168] transition-colors flex items-center justify-between cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
+                      <span>{isUsingCustomSheet ? 'Gerenciar Planilha Conectada' : 'Integrar Planilha Google / Forms'}</span>
+                    </div>
+                    <span className="text-[10px] text-[#A69986]">100% Autonomia</span>
+                  </button>
+                )}
+
+                <a
+                  href="https://wa.me/5581979149067?text=Ol%C3%A1%2C%20equipe%20Religare!%20Gostaria%20de%20tirar%20uma%20d%C3%BAvida%20sobre%20as%20categorias%20da%20loja."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-2.5 px-3 rounded-xl bg-[#18231B] hover:bg-[#202D23] border border-[#2B3B2F] text-xs font-semibold text-[#D8CFBF] hover:text-[#DFB168] transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <span>Atendimento WhatsApp: (81) 97914-9067</span>
+                </a>
+
+                <div className="text-[10px] text-[#7A7061] text-center">
+                  Espaço Religare • Medicinas consagradas e acolhimento feminino
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 };
