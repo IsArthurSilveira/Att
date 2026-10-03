@@ -88,7 +88,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
             placeholder="Buscar por medicina, planta, aldeia..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#141B16] border border-[#233226] focus:border-[#C28C4B] text-xs sm:text-sm text-[#F1ECE1] placeholder-[#736A5D] focus:outline-none transition-colors min-h-[44px]"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#141B16] border border-[#233226] focus:border-[#DFB168] text-xs sm:text-sm text-[#F1ECE1] placeholder-[#736A5D] focus:outline-none transition-colors min-h-[44px]"
           />
         </div>
       </div>
@@ -102,7 +102,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
               onClick={() => onSelectCategory(cat.id)}
               className={`px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer min-h-[38px] flex items-center shrink-0 ${
                 selectedCategory === cat.id
-                  ? 'bg-[#C28C4B] text-[#0E1310] shadow-md shadow-[#C28C4B]/20'
+                  ? 'bg-[#DFB168] text-[#0E1310] font-bold shadow-md shadow-[#DFB168]/25'
                   : 'bg-[#141B16] text-[#A69986] hover:text-[#F1ECE1] border border-[#233226] hover:border-[#384F3D]'
               }`}
             >
@@ -132,7 +132,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
             return (
               <div
                 key={product.id}
-                className="group relative flex flex-col rounded-2xl bg-[#141B16] border border-[#233226] hover:border-[#C28C4B]/50 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl"
+                className="group relative flex flex-col rounded-2xl bg-[#141B16] border border-[#233226] hover:border-[#DFB168]/50 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl"
               >
                 {/* Product Image Container */}
                 <div 
@@ -150,7 +150,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   {/* Origin Badge */}
                   <div className="absolute top-3 left-3 max-w-[80%] truncate">
                     <span className="backdrop-blur-md bg-[#0E1310]/85 text-[#D8CFBF] text-[10px] px-2.5 py-1 rounded-full border border-[#2B3B2F] font-medium flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#C28C4B] shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#DFB168] shrink-0" />
                       <span className="truncate">{product.origin.split(',')[0]}</span>
                     </span>
                   </div>
@@ -162,7 +162,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                       onSelectProduct(product);
                     }}
                     aria-label={`Ver detalhes de ${product.name}`}
-                    className="absolute bottom-3 right-3 p-2 rounded-full bg-[#0E1310]/85 border border-[#384F3D] text-[#D8CFBF] hover:text-[#C28C4B] transition-colors shadow-md backdrop-blur-sm cursor-pointer"
+                    className="absolute bottom-3 right-3 p-2 rounded-full bg-[#0E1310]/85 border border-[#384F3D] text-[#D8CFBF] hover:text-[#DFB168] transition-colors shadow-md backdrop-blur-sm cursor-pointer"
                   >
                     <Eye className="w-4 h-4" />
                   </button>
@@ -171,10 +171,10 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                 {/* Product Details */}
                 <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3 sm:space-y-4">
                   <div className="space-y-1.5 sm:space-y-2">
-                    <div className="flex items-center justify-between text-[11px] text-[#C28C4B] font-semibold tracking-wider uppercase">
+                    <div className="flex items-center justify-between text-[11px] text-[#DFB168] font-semibold tracking-wider uppercase">
                       <span>{product.categoryLabel}</span>
                       <div className="flex items-center gap-1 text-[#E0D7C6]">
-                        <Star className="w-3 h-3 text-[#C28C4B] fill-[#C28C4B]" />
+                        <Star className="w-3 h-3 text-[#DFB168] fill-[#DFB168]" />
                         <span>{product.rating.toFixed(1)}</span>
                         <span className="text-[#7D7263]">({product.reviewsCount})</span>
                       </div>
@@ -182,7 +182,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 
                     <h3 
                       onClick={() => onSelectProduct(product)}
-                      className="font-cinzel text-sm sm:text-base font-bold text-[#F1ECE1] group-hover:text-[#C28C4B] transition-colors line-clamp-2 cursor-pointer leading-snug"
+                      className="font-cinzel text-sm sm:text-base font-bold text-[#F1ECE1] group-hover:text-[#DFB168] transition-colors line-clamp-2 cursor-pointer leading-snug"
                     >
                       {product.name}
                     </h3>
@@ -210,10 +210,10 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 
                     <button
                       onClick={() => handleAdd(product)}
-                      className={`px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 min-h-[40px] ${
+                      className={`px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 min-h-[40px] shadow-sm ${
                         isAdded
                           ? 'bg-emerald-700 text-white shadow-md'
-                          : 'bg-[#C28C4B] hover:bg-[#D49E5D] text-[#0E1310] shadow-sm'
+                          : 'bg-[#DFB168] hover:bg-[#F0CD86] text-[#0E1310]'
                       }`}
                     >
                       {isAdded ? (

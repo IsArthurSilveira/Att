@@ -56,7 +56,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
           {/* Floating Origin Pill */}
           <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 p-2.5 sm:p-3 rounded-xl bg-[#0E1310]/85 backdrop-blur-md border border-[#2B3B2F] space-y-0.5">
-            <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-[#C28C4B] font-semibold">
+            <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-[#DFB168] font-semibold">
               <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               <span>{product.origin}</span>
             </div>
@@ -70,10 +70,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         <div className="p-4 sm:p-6 md:p-8 flex-1 flex flex-col justify-between space-y-4 sm:space-y-6 overflow-y-auto">
           
           <div className="space-y-3 sm:space-y-4">
-            <div className="flex items-center justify-between text-[11px] sm:text-xs text-[#C28C4B] font-semibold uppercase tracking-wider">
+            <div className="flex items-center justify-between text-[11px] sm:text-xs text-[#DFB168] font-semibold uppercase tracking-wider">
               <span>{product.categoryLabel}</span>
               <div className="flex items-center gap-1 text-[#E0D7C6]">
-                <Star className="w-3 h-3 text-[#C28C4B] fill-[#C28C4B]" />
+                <Star className="w-3 h-3 text-[#DFB168] fill-[#DFB168]" />
                 <span>{product.rating.toFixed(1)}</span>
                 <span className="text-[#6D6354]">({product.reviewsCount})</span>
               </div>
@@ -100,7 +100,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
             {/* Ritual use instruction */}
             <div className="p-3 sm:p-4 rounded-xl bg-[#0E1310] border border-[#233226] space-y-1">
-              <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold text-[#C28C4B]">
+              <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold text-[#DFB168]">
                 <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 <span>Rezo & Aplicação Ritualística:</span>
               </div>
@@ -111,7 +111,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
             {/* Consecration Note */}
             <div className="flex items-start gap-2 text-xs text-[#9B8F7D]">
-              <Feather className="w-3.5 h-3.5 text-[#C28C4B] shrink-0 mt-0.5" />
+              <Feather className="w-3.5 h-3.5 text-[#DFB168] shrink-0 mt-0.5" />
               <span><strong>Consagração:</strong> {product.consecrationNote}</span>
             </div>
 
@@ -159,7 +159,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               className={`w-full min-h-[46px] py-3 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md ${
                 added
                   ? 'bg-emerald-700 text-white shadow-lg'
-                  : 'bg-[#C28C4B] hover:bg-[#D49E5D] text-[#0E1310]'
+                  : 'bg-[#DFB168] hover:bg-[#F0CD86] text-[#0E1310]'
               }`}
             >
               {added ? (

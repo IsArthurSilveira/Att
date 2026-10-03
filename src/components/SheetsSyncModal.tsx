@@ -184,7 +184,7 @@ export const SheetsSyncModal: React.FC<SheetsSyncModalProps> = ({
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-[#C28C4B] hover:brightness-110 text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-950/40 disabled:opacity-50 min-h-[44px]"
+                    className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-[#DFB168] hover:brightness-110 text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-950/40 disabled:opacity-50 min-h-[44px]"
                   >
                     <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                     <span>{loading ? 'Sincronizando...' : 'Sincronizar Produtos Agora'}</span>

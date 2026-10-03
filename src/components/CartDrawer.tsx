@@ -248,7 +248,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleCheckoutClick}
-                className="w-full min-h-[48px] py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-[#C28C4B] hover:brightness-110 text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-950/40 text-center"
+                className="w-full min-h-[48px] py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-[#DFB168] hover:brightness-110 text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-950/40 text-center"
               >
                 <MessageCircle className="w-4 h-4 fill-white shrink-0" />
                 <span>Concluir Pedido no WhatsApp</span>

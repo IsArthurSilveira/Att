@@ -25,7 +25,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenSyncModal })
           {/* Brand & Mission with Religare Logo (Col 1-4) */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#C28C4B]/70 shadow-[0_0_12px_rgba(194,140,75,0.25)] shrink-0 bg-[#162119]">
+              <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#DFB168]/70 shadow-[0_0_12px_rgba(223,177,104,0.25)] shrink-0 bg-[#162119]">
                 <img 
                   src="/religare-logo.jpg" 
                   alt="Logo Religare" 
@@ -46,7 +46,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenSyncModal })
               Primeira casa cerimonial do Brasil com direção 100% feminina. Um espaço sagrado de cura, acolhimento, medicinas da floresta, velas ecológicas e instrumentos de oração com comércio ético e transparente.
             </p>
 
-            <div className="flex items-center gap-2.5 pt-1 text-xs text-[#C28C4B]">
+            <div className="flex items-center gap-2.5 pt-1 text-xs text-[#DFB168]">
               <ShieldCheck className="w-4 h-4 shrink-0" />
               <span>Comércio ético e curadoria de rezo consagrado.</span>
             </div>
@@ -59,28 +59,28 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenSyncModal })
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#catalogo" className="hover:text-[#C28C4B] transition-colors flex items-center gap-1.5">
-                  <ShoppingBag className="w-3.5 h-3.5 text-[#C28C4B]" />
+                <a href="#catalogo" className="hover:text-[#DFB168] transition-colors flex items-center gap-1.5">
+                  <ShoppingBag className="w-3.5 h-3.5 text-[#DFB168]" />
                   <span>Todos os Produtos</span>
                 </a>
               </li>
               <li>
-                <a href="#catalogo" className="hover:text-[#C28C4B] transition-colors">
+                <a href="#catalogo" className="hover:text-[#DFB168] transition-colors">
                   Tepis & Kuripes (Sopro Imperial)
                 </a>
               </li>
               <li>
-                <a href="#catalogo" className="hover:text-[#C28C4B] transition-colors">
+                <a href="#catalogo" className="hover:text-[#DFB168] transition-colors">
                   Rapés Tradicionais & Sananga
                 </a>
               </li>
               <li>
-                <a href="#catalogo" className="hover:text-[#C28C4B] transition-colors">
+                <a href="#catalogo" className="hover:text-[#DFB168] transition-colors">
                   Velas Rituais (Lumiar) & Flores (Tuana)
                 </a>
               </li>
               <li>
-                <a href="#catalogo" className="hover:text-[#C28C4B] transition-colors">
+                <a href="#catalogo" className="hover:text-[#DFB168] transition-colors">
                   Vivências & Terapias Integrativas
                 </a>
               </li>
@@ -105,7 +105,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenSyncModal })
             </h4>
             <div className="space-y-2.5 text-xs text-[#8C8070]">
               <div className="flex items-start gap-2">
-                <MapPin className="w-3.5 h-3.5 text-[#C28C4B] shrink-0 mt-0.5" />
+                <MapPin className="w-3.5 h-3.5 text-[#DFB168] shrink-0 mt-0.5" />
                 <span>Envios para todo o Brasil • Casa de Cura</span>
               </div>
               <div className="flex items-start gap-2">
@@ -120,7 +120,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenSyncModal })
                 </a>
               </div>
               <div className="flex items-start gap-2">
-                <Mail className="w-3.5 h-3.5 text-[#C28C4B] shrink-0 mt-0.5" />
+                <Mail className="w-3.5 h-3.5 text-[#DFB168] shrink-0 mt-0.5" />
                 <span>contato@religare.org</span>
               </div>
             </div>
@@ -149,12 +149,12 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenSyncModal })
                     placeholder="Seu melhor e-mail..."
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-3 pr-11 py-2.5 rounded-xl bg-[#141B16] border border-[#233226] focus:border-[#C28C4B] text-xs text-[#F1ECE1] placeholder-[#6D6354] focus:outline-none min-h-[44px]"
+                    className="w-full pl-3 pr-11 py-2.5 rounded-xl bg-[#141B16] border border-[#233226] focus:border-[#DFB168] text-xs text-[#F1ECE1] placeholder-[#6D6354] focus:outline-none min-h-[44px]"
                   />
                   <button
                     type="submit"
                     aria-label="Inscrever-se na newsletter"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-[#C28C4B] text-[#0E1310] hover:bg-[#DFB168] transition-colors cursor-pointer flex items-center justify-center"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-[#DFB168] text-[#0E1310] hover:bg-[#F0CD86] transition-colors cursor-pointer flex items-center justify-center font-bold"
                   >
                     <Send className="w-3.5 h-3.5" />
                   </button>
