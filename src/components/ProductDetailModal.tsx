@@ -110,24 +110,28 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             </div>
 
             {/* Consecration Note */}
-            <div className="flex items-start gap-2 text-xs text-[#9B8F7D]">
-              <Feather className="w-3.5 h-3.5 text-[#DFB168] shrink-0 mt-0.5" />
-              <span><strong>Consagração:</strong> {product.consecrationNote}</span>
-            </div>
+            {product.consecrationNote && (
+              <div className="flex items-start gap-2.5 text-xs text-[#C7BCAB] p-3 rounded-xl bg-[#0E1310] border border-[#233226]">
+                <Feather className="w-4 h-4 text-[#DFB168] shrink-0 mt-0.5" />
+                <span className="leading-relaxed"><strong className="text-[#DFB168]">Consagração:</strong> {product.consecrationNote}</span>
+              </div>
+            )}
 
             {/* Elements / Composition tags */}
-            <div className="space-y-1">
-              <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-[#736A5D] font-bold block">
-                Matérias-Primas:
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {product.elements.map((elem, i) => (
-                  <span key={i} className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-[#1B251E] text-[#D8CFBF] text-[10px] sm:text-[11px] border border-[#2B3B2F]">
-                    {elem}
-                  </span>
-                ))}
+            {product.elements && product.elements.length > 0 && (
+              <div className="space-y-1.5">
+                <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-[#DFB168] font-bold block">
+                  Matérias-Primas:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {product.elements.map((elem, i) => (
+                    <span key={i} className="px-2.5 py-1 rounded-lg bg-[#18231B] text-[#D8CFBF] text-[11px] border border-[#2B3B2F] font-medium shadow-sm">
+                      {elem}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Quantity and Action Button */}

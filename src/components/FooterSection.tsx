@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { MapPin, Mail, MessageCircle, ShieldCheck, Check, Send, ShoppingBag, FileSpreadsheet } from 'lucide-react';
+import { MapPin, Mail, MessageCircle, ShieldCheck, Check, Send, ShoppingBag, FileSpreadsheet, Calendar } from 'lucide-react';
 
 interface FooterSectionProps {
-  onOpenSyncModal?: () => void;
+  onNavigate?: (view: 'home' | 'shop') => void;
+  onSelectCategory?: (category: string) => void;
 }
 
-export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenSyncModal }) => {
+export const FooterSection: React.FC<FooterSectionProps> = ({ 
+  onNavigate,
+  onSelectCategory
+}) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -13,6 +17,29 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenSyncModal })
     e.preventDefault();
     if (!email) return;
     setSubscribed(true);
+  };
+
+  const handleCategoryClick = (catId: string) => {
+    if (onSelectCategory) {
+      onSelectCategory(catId);
+    }
+    if (onNavigate) {
+      onNavigate('shop');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleEventsClick = () => {
+    if (onNavigate) {
+      onNavigate('home');
+      setTimeout(() => {
+        const el = document.getElementById('eventos');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 150);
+    } else {
+      const el = document.getElementById('eventos');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -37,13 +64,13 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenSyncModal })
                   RELIGARE
                 </span>
                 <span className="text-[10px] text-[#DFB168] tracking-[0.14em] uppercase font-semibold block">
-                  1ª Casa do Brasil 100% Feminina
+                  1ª Casa de Recife Dirigida por Mulheres
                 </span>
               </div>
             </div>
 
             <p className="text-xs sm:text-sm text-[#8C8070] leading-relaxed">
-              Primeira casa cerimonial do Brasil com direção 100% feminina. Um espaço sagrado de cura, acolhimento, medicinas da floresta, velas ecológicas e instrumentos de oração com comércio ético e transparente.
+              Primeira casa cerimonial de Recife dirigida por mulheres. Um espaço sagrado de cura, acolhimento, medicinas da floresta, velas ecológicas e instrumentos de oração com comércio ético e transparente.
             </p>
 
             <div className="flex items-center gap-2.5 pt-1 text-xs text-[#DFB168]">
@@ -59,42 +86,63 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenSyncModal })
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#catalogo" className="hover:text-[#DFB168] transition-colors flex items-center gap-1.5">
+                <button 
+                  onClick={() => handleCategoryClick('all')} 
+                  className="hover:text-[#DFB168] transition-colors flex items-center gap-1.5 cursor-pointer text-left"
+                >
                   <ShoppingBag className="w-3.5 h-3.5 text-[#DFB168]" />
                   <span>Todos os Produtos</span>
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#catalogo" className="hover:text-[#DFB168] transition-colors">
+                <button 
+                  onClick={() => handleCategoryClick('sopro')} 
+                  className="hover:text-[#DFB168] transition-colors cursor-pointer text-left block"
+                >
                   Tepis & Kuripes (Sopro Imperial)
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#catalogo" className="hover:text-[#DFB168] transition-colors">
+                <button 
+                  onClick={() => handleCategoryClick('medicinas')} 
+                  className="hover:text-[#DFB168] transition-colors cursor-pointer text-left block"
+                >
                   Rapés Tradicionais & Sananga
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#catalogo" className="hover:text-[#DFB168] transition-colors">
-                  Velas Rituais (Lumiar) & Flores (Tuana)
-                </a>
+                <button 
+                  onClick={() => handleCategoryClick('velas')} 
+                  className="hover:text-[#DFB168] transition-colors cursor-pointer text-left block"
+                >
+                  Velas Rituais (Lumiar)
+                </button>
               </li>
               <li>
-                <a href="#catalogo" className="hover:text-[#DFB168] transition-colors">
-                  Vivências & Terapias Integrativas
-                </a>
+                <button 
+                  onClick={() => handleCategoryClick('ervas')} 
+                  className="hover:text-[#DFB168] transition-colors cursor-pointer text-left block"
+                >
+                  Ervas & Defumações (Tuana Flores)
+                </button>
               </li>
-              {onOpenSyncModal && (
-                <li className="pt-2 border-t border-[#1C261E]">
-                  <button
-                    onClick={onOpenSyncModal}
-                    className="hover:text-[#DFB168] transition-colors flex items-center gap-1.5 cursor-pointer text-[#8C8070] text-left"
-                  >
-                    <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span>Gerenciar Produtos (Google Forms)</span>
-                  </button>
-                </li>
-              )}
+              <li>
+                <button 
+                  onClick={() => handleCategoryClick('artes')} 
+                  className="hover:text-[#DFB168] transition-colors cursor-pointer text-left block"
+                >
+                  Artes dos Guias & Maracás
+                </button>
+              </li>
+              <li className="pt-1.5 pb-1">
+                <button 
+                  onClick={handleEventsClick} 
+                  className="hover:text-[#DFB168] transition-colors flex items-center gap-1.5 cursor-pointer text-left text-emerald-400 font-semibold"
+                >
+                  <Calendar className="w-3.5 h-3.5 text-[#DFB168]" />
+                  <span>Vivências & Experiências do Mês</span>
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -106,7 +154,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenSyncModal })
             <div className="space-y-2.5 text-xs text-[#8C8070]">
               <div className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-[#DFB168] shrink-0 mt-0.5" />
-                <span>Envios para todo o Brasil • Casa de Cura</span>
+                <span>Envios para Recife e Região • Casa de Cura</span>
               </div>
               <div className="flex items-start gap-2">
                 <MessageCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Menu, X, Sparkles, ChevronRight, Wind, Flame, Heart, Flower2, Music, Layers, FileSpreadsheet } from 'lucide-react';
+import { ShoppingBag, Menu, X, Sparkles, ChevronRight, Wind, Flame, Flower2, Music, Layers, FileSpreadsheet, Home, Store, Calendar } from 'lucide-react';
 import { CartItem, Product } from '../types';
 import { CATEGORIES } from '../data/products';
 
@@ -9,8 +9,8 @@ interface NavbarProps {
   selectedCategory: string;
   onSelectCategory: (categoryId: string) => void;
   products: Product[];
-  onOpenSyncModal?: () => void;
-  isUsingCustomSheet?: boolean;
+  currentView?: 'home' | 'shop';
+  onNavigate?: (view: 'home' | 'shop') => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -19,8 +19,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   selectedCategory,
   onSelectCategory,
   products,
-  onOpenSyncModal,
-  isUsingCustomSheet
+  currentView = 'home',
+  onNavigate
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -29,9 +29,35 @@ export const Navbar: React.FC<NavbarProps> = ({
   const handleCategoryClick = (categoryId: string) => {
     onSelectCategory(categoryId);
     setSidebarOpen(false);
+    if (onNavigate) {
+      onNavigate('shop');
+    }
     const element = document.getElementById('catalogo');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleBrandClick = () => {
+    if (onNavigate) {
+      onNavigate('home');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleEventsClick = () => {
+    setSidebarOpen(false);
+    if (onNavigate && currentView !== 'home') {
+      onNavigate('home');
+      setTimeout(() => {
+        const el = document.getElementById('eventos');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 150);
+    } else {
+      const el = document.getElementById('eventos');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -50,8 +76,6 @@ export const Navbar: React.FC<NavbarProps> = ({
         return <Flower2 className="w-4 h-4 text-emerald-300" />;
       case 'artes':
         return <Music className="w-4 h-4 text-rose-400" />;
-      case 'terapias':
-        return <Heart className="w-4 h-4 text-rose-300" />;
       default:
         return <Sparkles className="w-4 h-4 text-[#DFB168]" />;
     }
@@ -72,8 +96,6 @@ export const Navbar: React.FC<NavbarProps> = ({
         return 'Defumações e resinas puras • Tuana Flores';
       case 'artes':
         return 'Maracás cerimoniais e artes sagradas dos guias';
-      case 'terapias':
-        return 'Círculos e vivências de acolhimento feminino';
       default:
         return '';
     }
@@ -92,9 +114,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           
           {/* Brand Identity with Religare Logo */}
           <div 
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={handleBrandClick}
             className="flex items-center gap-2.5 sm:gap-3.5 cursor-pointer group min-w-0"
             id="brand-logo"
+            title="Ir para o Início"
           >
             <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#DFB168]/80 shadow-[0_0_14px_rgba(223,177,104,0.3)] group-hover:border-[#DFB168] transition-all shrink-0 bg-[#162119]">
               <img 
@@ -108,30 +131,24 @@ export const Navbar: React.FC<NavbarProps> = ({
                 RELIGARE
               </div>
               <p className="text-[9px] sm:text-[10px] text-[#DFB168] tracking-[0.14em] uppercase font-semibold truncate flex items-center gap-1">
-                <span>1ª Casa do Brasil 100% Dirigida por Mulheres</span>
+                <span>1ª Casa de Recife Dirigida por Mulheres</span>
               </p>
             </div>
           </div>
 
-          {/* Action Controls in Right Corner: Store Button + Menu Button side by side */}
-          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* Action Controls in Right Corner: Store/Cart + Unified Menu Button */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             
-            {/* Subtle Pill for Female Leadership on Desktop */}
-            <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#18231B] border border-[#DFB168]/30 text-[#DFB168] text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5 text-[#DFB168]" />
-              <span>Liderança 100% Feminina</span>
-            </div>
-
-            {/* Store / Cart Button (Botão de Loja) */}
+            {/* Store / Cart Button (Sacola de Compras) */}
             <button
               id="cart-drawer-btn"
               onClick={onOpenCart}
-              className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#18231B] border border-[#384F3D] hover:border-[#DFB168] text-[#F1ECE1] transition-all cursor-pointer min-h-[40px] shadow-sm group"
+              className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#18231B] hover:bg-[#202E24] border border-[#384F3D] hover:border-[#DFB168] text-[#F1ECE1] transition-all cursor-pointer min-h-[40px] shadow-sm group"
               aria-label="Abrir Sacola de Compras"
               title="Sacola de Compras"
             >
               <ShoppingBag className="w-4 h-4 text-[#DFB168] group-hover:scale-110 transition-transform" />
-              <span className="hidden sm:inline text-xs font-semibold text-[#E6DCB8]">Sacola</span>
+              <span className="text-xs font-semibold text-[#E6DCB8]">Sacola</span>
               {totalItems > 0 ? (
                 <span className="w-5 h-5 rounded-full bg-[#DFB168] text-[#0E1310] text-[11px] font-bold flex items-center justify-center shadow-md animate-bounce">
                   {totalItems}
@@ -141,23 +158,23 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </button>
 
-            {/* Menu / Sidebar / Index Button (Botãozinho de menu ao lado do botão de loja) */}
+            {/* Unified Menu Button (Substitui botões redundantes e reúne Início, Loja, Vivências e Categorias) */}
             <button
               id="categories-sidebar-btn"
               onClick={() => setSidebarOpen(true)}
-              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#18231B] border border-[#384F3D] hover:border-[#DFB168] text-[#F1ECE1] transition-all cursor-pointer min-h-[40px] shadow-sm group"
-              aria-label="Abrir Índice de Categorias"
-              title="Índice de Categorias"
+              className="flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[#18231B] hover:bg-[#223126] border border-[#384F3D] hover:border-[#DFB168] text-[#F1ECE1] transition-all cursor-pointer min-h-[40px] shadow-sm group"
+              aria-label="Abrir Menu Principal"
+              title="Abrir Menu de Navegação"
             >
               <Menu className="w-4 h-4 text-[#DFB168] group-hover:scale-110 transition-transform" />
-              <span className="hidden sm:inline text-xs font-semibold text-[#E6DCB8]">Categorias</span>
+              <span className="text-xs font-semibold text-[#E6DCB8]">Menu</span>
             </button>
 
           </div>
         </div>
       </header>
 
-      {/* Sidebar / Index Drawer for All Product Categories */}
+      {/* Sidebar / Index Drawer for All Product Categories & Navigation */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           {/* Backdrop */}
@@ -177,100 +194,149 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </div>
                   <div>
                     <h3 className="font-cinzel text-base font-bold text-[#F1ECE1]">
-                      Índice de Produtos
+                      Menu Religare
                     </h3>
                     <p className="text-[10px] text-[#DFB168] font-semibold tracking-wider uppercase">
-                      1ª Casa 100% Feminina
+                      1ª Casa de Recife Dirigida por Mulheres
                     </p>
                   </div>
                 </div>
 
                 <button
                   onClick={() => setSidebarOpen(false)}
-                  aria-label="Fechar índice"
+                  aria-label="Fechar menu"
                   className="p-2 w-9 h-9 flex items-center justify-center rounded-lg text-[#A69986] hover:text-[#F1ECE1] hover:bg-[#1E2B21] transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Sidebar Categories List */}
-              <div className="flex-1 overflow-y-auto p-3 sm:p-5 space-y-2">
-                <div className="px-2 pt-1 pb-2 text-[11px] font-bold text-[#8C8070] uppercase tracking-wider">
-                  Navegar por Categoria
-                </div>
-
-                {CATEGORIES.map((cat) => {
-                  const isSelected = selectedCategory === cat.id;
-                  const count = getCategoryCount(cat.id);
-                  const icon = getCategoryIcon(cat.id);
-                  const subtitle = getCategorySubtitle(cat.id);
-
-                  return (
+              {/* Sidebar Content */}
+              <div className="flex-1 overflow-y-auto p-3 sm:p-5 space-y-4">
+                
+                {/* Quick View Navigation */}
+                {onNavigate && (
+                  <div className="grid grid-cols-2 gap-2 pb-2 border-b border-[#233226]">
                     <button
-                      key={cat.id}
-                      onClick={() => handleCategoryClick(cat.id)}
-                      className={`w-full text-left p-3 rounded-xl transition-all cursor-pointer flex items-center justify-between gap-3 border ${
-                        isSelected
-                          ? 'bg-[#1D2920] border-[#DFB168] shadow-md shadow-[#DFB168]/10'
-                          : 'bg-[#0E1310]/70 hover:bg-[#18231B] border-[#233226] hover:border-[#384F3D]'
+                      onClick={() => {
+                        onNavigate('home');
+                        setSidebarOpen(false);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer ${
+                        currentView === 'home'
+                          ? 'bg-[#18231B] border-[#DFB168] text-[#DFB168]'
+                          : 'bg-[#0E1310] border-[#233226] text-[#A69986] hover:text-[#F1ECE1]'
                       }`}
                     >
-                      <div className="flex items-start gap-3 min-w-0">
-                        <div className={`p-2 rounded-lg mt-0.5 shrink-0 ${
-                          isSelected ? 'bg-[#DFB168]/20 border border-[#DFB168]/40' : 'bg-[#18231B] border border-[#2B3B2F]'
-                        }`}>
-                          {icon}
-                        </div>
-                        <div className="min-w-0">
-                          <div className={`font-cinzel text-xs sm:text-sm font-bold truncate ${
-                            isSelected ? 'text-[#DFB168]' : 'text-[#F1ECE1]'
-                          }`}>
-                            {cat.label}
-                          </div>
-                          {subtitle && (
-                            <div className="text-[11px] text-[#A69986] truncate mt-0.5">
-                              {subtitle}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-semibold ${
-                          isSelected
-                            ? 'bg-[#DFB168] text-[#0E1310]'
-                            : 'bg-[#1E2B21] text-[#A69986]'
-                        }`}>
-                          {count}
-                        </span>
-                        <ChevronRight className={`w-4 h-4 ${
-                          isSelected ? 'text-[#DFB168]' : 'text-[#6D6354]'
-                        }`} />
-                      </div>
+                      <Home className="w-3.5 h-3.5" />
+                      <span>Início</span>
                     </button>
-                  );
-                })}
+
+                    <button
+                      onClick={() => {
+                        onNavigate('shop');
+                        onSelectCategory('all');
+                        setSidebarOpen(false);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer ${
+                        currentView === 'shop'
+                          ? 'bg-[#18231B] border-[#DFB168] text-[#DFB168]'
+                          : 'bg-[#0E1310] border-[#233226] text-[#A69986] hover:text-[#F1ECE1]'
+                      }`}
+                    >
+                      <Store className="w-3.5 h-3.5" />
+                      <span>Loja Completa</span>
+                    </button>
+                  </div>
+                )}
+
+                {/* Direct Shortcut to Sacred Events */}
+                <button
+                  onClick={handleEventsClick}
+                  className="w-full text-left p-3 rounded-xl bg-gradient-to-r from-[#18231B] to-[#121A14] hover:from-[#213025] hover:to-[#18231B] border border-[#DFB168]/40 hover:border-[#DFB168] flex items-center justify-between transition-all cursor-pointer shadow-sm group"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 rounded-lg bg-[#0E1310] border border-[#DFB168]/40 text-[#DFB168]">
+                      <Calendar className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="font-cinzel text-xs sm:text-sm font-bold text-[#F1ECE1] group-hover:text-[#DFB168] transition-colors flex items-center gap-1.5">
+                        <span>Vivências & Eventos do Mês</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      </div>
+                      <p className="text-[10px] text-[#A69986]">
+                        Rodas de mulheres, cerimônias e círculos sagrados
+                      </p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-[#DFB168] group-hover:translate-x-0.5 transition-transform" />
+                </button>
+
+                {/* Categories List */}
+                <div className="space-y-2">
+                  <div className="px-2 text-[11px] font-bold text-[#8C8070] uppercase tracking-wider">
+                    Categorias da Loja
+                  </div>
+
+                  {CATEGORIES.map((cat) => {
+                    const isSelected = selectedCategory === cat.id && currentView === 'shop';
+                    const count = getCategoryCount(cat.id);
+                    const icon = getCategoryIcon(cat.id);
+                    const subtitle = getCategorySubtitle(cat.id);
+
+                    return (
+                      <button
+                        key={cat.id}
+                        onClick={() => handleCategoryClick(cat.id)}
+                        className={`w-full text-left p-3 rounded-xl transition-all cursor-pointer flex items-center justify-between gap-3 border ${
+                          isSelected
+                            ? 'bg-[#1D2920] border-[#DFB168] shadow-md shadow-[#DFB168]/10'
+                            : 'bg-[#0E1310]/70 hover:bg-[#18231B] border-[#233226] hover:border-[#384F3D]'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3 min-w-0">
+                          <div className={`p-2 rounded-lg mt-0.5 shrink-0 ${
+                            isSelected ? 'bg-[#DFB168]/20 border border-[#DFB168]/40' : 'bg-[#18231B] border border-[#2B3B2F]'
+                          }`}>
+                            {icon}
+                          </div>
+                          <div className="min-w-0">
+                            <div className={`font-cinzel text-xs sm:text-sm font-bold truncate ${
+                              isSelected ? 'text-[#DFB168]' : 'text-[#F1ECE1]'
+                            }`}>
+                              {cat.label}
+                            </div>
+                            {subtitle && (
+                              <div className="text-[11px] text-[#A69986] truncate mt-0.5">
+                                {subtitle}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-semibold ${
+                            isSelected
+                              ? 'bg-[#DFB168] text-[#0E1310]'
+                              : 'bg-[#1E2B21] text-[#A69986]'
+                          }`}>
+                            {count}
+                          </span>
+                          <ChevronRight className={`w-4 h-4 ${
+                            isSelected ? 'text-[#DFB168]' : 'text-[#6D6354]'
+                          }`} />
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
               </div>
 
               {/* Sidebar Footer Support & WhatsApp */}
               <div className="p-4 sm:p-5 border-t border-[#233226] bg-[#0E1310] space-y-2.5">
-                {onOpenSyncModal && (
-                  <button
-                    onClick={() => {
-                      setSidebarOpen(false);
-                      onOpenSyncModal();
-                    }}
-                    className="w-full py-2.5 px-3 rounded-xl bg-[#141B16] hover:bg-[#1D271F] border border-[#2B3B2F] hover:border-[#DFB168]/50 text-xs font-semibold text-[#DFB168] transition-colors flex items-center justify-between cursor-pointer"
-                  >
-                    <div className="flex items-center gap-2">
-                      <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
-                      <span>{isUsingCustomSheet ? 'Gerenciar Planilha Conectada' : 'Integrar Planilha Google / Forms'}</span>
-                    </div>
-                    <span className="text-[10px] text-[#A69986]">100% Autonomia</span>
-                  </button>
-                )}
-
                 <a
                   href="https://wa.me/5581979149067?text=Ol%C3%A1%2C%20equipe%20Religare!%20Gostaria%20de%20tirar%20uma%20d%C3%BAvida%20sobre%20as%20categorias%20da%20loja."
                   target="_blank"

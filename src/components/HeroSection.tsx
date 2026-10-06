@@ -39,7 +39,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base md:text-lg text-[#C7BCAB] font-normal leading-relaxed max-w-2xl mx-auto font-sans-clean">
-            Pioneira no país como a primeira casa cerimonial com liderança 100% feminina. Unimos acolhimento humanizado, respeito, escuta e amor à força dos instrumentos sagrados (Sopro Imperial), rapés tradicionais, sananga viva e velas rituais da Lumiar.
+            Pioneira em Recife como a primeira casa cerimonial dirigida por mulheres. Unimos acolhimento humanizado, respeito, escuta e amor à força dos instrumentos sagrados (Sopro Imperial), rapés tradicionais, sananga viva e velas rituais da Lumiar.
           </p>
 
           {/* Direct e-commerce CTA with radiant golden button (Matching the sacred gold palette) */}
@@ -59,8 +59,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[#121A14]/90 border border-[#233226] hover:border-[#DFB168]/40 transition-colors shadow-sm">
               <Heart className="w-4 h-4 text-[#DFB168] shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-xs font-semibold text-[#F1ECE1]">Direção 100% Feminina</h4>
-                <p className="text-[11px] text-[#A69986] leading-tight mt-0.5">Primeira casa cerimonial do Brasil com liderança exclusivamente feminina.</p>
+                <h4 className="text-xs font-semibold text-[#F1ECE1]">Direção Feminina</h4>
+                <p className="text-[11px] text-[#A69986] leading-tight mt-0.5">Primeira casa cerimonial de Recife dirigida por mulheres.</p>
               </div>
             </div>
 

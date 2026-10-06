@@ -7,7 +7,6 @@ export const CATEGORIES = [
   { id: 'velas', label: 'Velas Rituais' },
   { id: 'ervas', label: 'Ervas & Defumações' },
   { id: 'artes', label: 'Artes dos Guias & Maracás' },
-  { id: 'terapias', label: 'Vivências & Terapias' },
 ] as const;
 
 export const PRODUCTS: Product[] = [
@@ -221,62 +220,5 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewsCount: 19,
     consecrationNote: 'Peça exclusiva e numerada, benzida no altar da Casa de Cura.'
-  },
-
-  // --- VIVÊNCIAS & TERAPIAS INTEGRATIVAS (Do Canvas: Sagrado Feminino, Reiki, Ayurvédica) ---
-  {
-    id: 'terapia-ayurvedica-isabella',
-    name: 'Sessão Presencial de Terapia Ayurvédica & Massagem',
-    category: 'terapias',
-    categoryLabel: 'Vivências & Terapias',
-    price: 220.00,
-    origin: 'Atendimento presencial na sede da Casa de Cura',
-    artisan: 'Terapeuta Isabella • Especialista Ayurvédica',
-    description: 'Sessão individual com óleos medicados quentes, diagnóstico de doshas e manobras corporais desintoxicantes para reequilíbrio dos canais vitais e relaxamento profundo.',
-    ritualUse: 'Alívio de sobrecargas emocionais, nutrição celular e restauração da vitalidade.',
-    elements: ['Óleos Vegetais Medicados', 'Ervas Terapêuticas', 'Aromaterapia'],
-    imageUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80',
-    inStock: true,
-    featured: true,
-    rating: 5.0,
-    reviewsCount: 28,
-    consecrationNote: 'Inclui anamnese integrativa e suporte pós-sessão.'
-  },
-  {
-    id: 'sessao-reiki-diogo',
-    name: 'Alinhamento Energético & Reiki com Mestre Diogo',
-    category: 'terapias',
-    categoryLabel: 'Vivências & Terapias',
-    price: 180.00,
-    origin: 'Espaço de Terapias Integrativas da Casa',
-    artisan: 'Mestre Diogo • Linhagem Tradicional Usui',
-    description: 'Harmonização dos chakras e aplicação de energia sutil para liberação de bloqueios, reconexão interior e tranquilidade do corpo mental e emocional.',
-    ritualUse: 'Harmonização integral dos centros de força e integração energética.',
-    elements: ['Cristaloterapia', 'Aromaterapia', 'Defumação Individual'],
-    imageUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
-    inStock: true,
-    featured: false,
-    rating: 4.9,
-    reviewsCount: 35,
-    consecrationNote: 'Agendamento flexível com atendimento humanizado e sigiloso.'
-  },
-  {
-    id: 'imersao-sagrado-feminino',
-    name: 'Imersão & Vivência do Sagrado Feminino na Casa',
-    category: 'terapias',
-    categoryLabel: 'Vivências & Terapias',
-    price: 320.00,
-    originalPrice: 380.00,
-    origin: 'Casa de Cura Espiritual com Direção 100% Feminina',
-    artisan: 'Guiança pelas Guardiãs da Casa de Cura',
-    description: 'Encontro vivencial de reconexão ancestral com a força feminina, rodas de partilha, medicinas sutis, cantos sagrados e práticas meditativas de acolhimento e autoconhecimento.',
-    ritualUse: 'Despertar da intuição, acolhimento de questões emocionais e fortalecimento da força interna.',
-    elements: ['Roda de Rezo', 'Banhos de Ervas', 'Círculo de Integração'],
-    imageUrl: 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=800&q=80',
-    inStock: true,
-    featured: true,
-    rating: 5.0,
-    reviewsCount: 49,
-    consecrationNote: 'Triagem cuidadosa pré-ritual com assistência fraterna e zelo presencial.'
   }
 ];

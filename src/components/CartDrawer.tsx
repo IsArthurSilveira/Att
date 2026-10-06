@@ -32,7 +32,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   // Generate structured, pre-filled WhatsApp message for number 81979149067
   const generateWhatsAppMessage = () => {
     let msg = `🌿 *NOVO PEDIDO • RELIGARE* 🌿\n`;
-    msg += `_1ª Casa de Ayahuasca do Brasil 100% Dirigida por Mulheres_\n\n`;
+    msg += `_1ª Casa de Ayahuasca de Recife Dirigida por Mulheres_\n\n`;
 
     if (customerName.trim()) {
       msg += `👤 *Nome do Cliente:* ${customerName.trim()}\n`;

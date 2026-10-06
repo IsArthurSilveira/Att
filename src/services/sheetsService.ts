@@ -2,18 +2,46 @@ import { Product } from '../types';
 import { PRODUCTS } from '../data/products';
 
 /**
+ * Returns a high-quality default sacred image for a given category
+ */
+function getDefaultCategoryImage(categoryId: string): string {
+  switch (categoryId) {
+    case 'sopro':
+      return 'https://images.unsplash.com/photo-1544717302-de2939b7ef71?auto=format&fit=crop&w=800&q=80';
+    case 'medicinas':
+      return 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80';
+    case 'velas':
+      return 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=800&q=80';
+    case 'ervas':
+      return 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80';
+    case 'artes':
+      return 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=800&q=80';
+    default:
+      return 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80';
+  }
+}
+
+/**
  * Converts any Google Drive shareable link into a direct, high-performance CDN image URL.
  * Supported formats:
  * - https://drive.google.com/file/d/FILE_ID/view?usp=sharing
  * - https://drive.google.com/open?id=FILE_ID
  * - https://drive.google.com/uc?id=FILE_ID&export=download
  * - FILE_ID directly
+ * If a folder link (/drive/folders/...) or empty string is passed, safely returns a thematic fallback image.
  */
-export function formatDriveImageUrl(rawUrl: string): string {
-  if (!rawUrl) return '';
+export function formatDriveImageUrl(rawUrl: string, categoryId = 'medicinas'): string {
+  if (!rawUrl || !rawUrl.trim()) {
+    return getDefaultCategoryImage(categoryId);
+  }
   const trimmed = rawUrl.trim();
 
-  // If it's already an external HTTP image that isn't Google Drive
+  // If user pasted a folder link instead of an image file link:
+  if (trimmed.includes('/drive/folders/')) {
+    return getDefaultCategoryImage(categoryId);
+  }
+
+  // If it's already an external HTTP image (like unsplash or direct cdn)
   if (!trimmed.includes('drive.google.com') && !trimmed.includes('googleusercontent.com')) {
     return trimmed;
   }
@@ -81,7 +109,7 @@ export function parseCSV(csvText: string): string[][] {
  * Normalizes category keys matching Religare categories
  */
 function normalizeCategory(rawCategory: string): { id: string; label: string } {
-  const lower = (rawCategory || '').toLowerCase();
+  const lower = (rawCategory || '').toLowerCase().trim();
 
   if (lower.includes('sopro') || lower.includes('tepi') || lower.includes('kuripe')) {
     return { id: 'sopro', label: 'Tepis & Kuripes' };
@@ -92,41 +120,43 @@ function normalizeCategory(rawCategory: string): { id: string; label: string } {
   if (lower.includes('vela') || lower.includes('lumiar')) {
     return { id: 'velas', label: 'Velas Rituais' };
   }
-  if (lower.includes('erva') || lower.includes('defuma') || lower.includes('breu') || lower.includes('tuana')) {
+  if (lower.includes('erva') || lower.includes('defuma') || lower.includes('breu') || lower.includes('tuana') || lower.includes('flor')) {
     return { id: 'ervas', label: 'Ervas & Defumações' };
   }
   if (lower.includes('marac') || lower.includes('arte') || lower.includes('guia')) {
     return { id: 'artes', label: 'Artes dos Guias & Maracás' };
   }
-  if (lower.includes('terapia') || lower.includes('vivencia') || lower.includes('vivência') || lower.includes('roda')) {
-    return { id: 'terapias', label: 'Vivências & Terapias' };
+
+  // If user entered a custom name (e.g. "teste" or custom section)
+  if (lower && lower !== 'teste') {
+    return { id: 'medicinas', label: rawCategory.trim() };
   }
 
-  return { id: 'medicinas', label: 'Rapés & Sananga' };
+  return { id: 'medicinas', label: 'Medicinas & Feitios' };
 }
 
 /**
- * Converts a Google Sheet URL or ID into the public CSV fetch endpoint
+ * Converts a Google Sheet URL or ID into the public CSV fetch endpoint with gid support
  */
 export function getSheetCsvUrl(input: string): string {
   const trimmed = input.trim();
   if (!trimmed) return '';
 
-  // If already a pub?output=csv link
-  if (trimmed.includes('pub?output=csv') || trimmed.includes('export?format=csv') || trimmed.includes('gviz/tq?tqx=out:csv')) {
+  // If already a pub?output=csv or export?format=csv link
+  if (trimmed.includes('pub?output=csv') || trimmed.includes('export?format=csv')) {
     return trimmed;
   }
 
-  // If it's a standard Google Sheet sharing URL:
-  // e.g. https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit?usp=sharing
-  const match = trimmed.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
-  if (match && match[1]) {
-    return `https://docs.google.com/spreadsheets/d/${match[1]}/gviz/tq?tqx=out:csv`;
-  }
+  // Extract sheet ID
+  const idMatch = trimmed.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+  const sheetId = idMatch ? idMatch[1] : (/^[a-zA-Z0-9_-]{20,}$/.test(trimmed) ? trimmed : null);
 
-  // If it's just the ID
-  if (/^[a-zA-Z0-9_-]{20,}$/.test(trimmed)) {
-    return `https://docs.google.com/spreadsheets/d/${trimmed}/gviz/tq?tqx=out:csv`;
+  // Extract gid if provided (e.g., gid=728455759 or #gid=728455759)
+  const gidMatch = trimmed.match(/[?&#]gid=([0-9]+)/);
+  const gidParam = gidMatch ? `&gid=${gidMatch[1]}` : '';
+
+  if (sheetId) {
+    return `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv${gidParam}`;
   }
 
   return trimmed;
@@ -147,30 +177,82 @@ export async function fetchProductsFromSheet(sheetUrlOrId: string): Promise<Prod
   }
 
   const csvText = await response.text();
+  
+  // If Google returned an HTML login page instead of CSV, it's not public
+  if (csvText.includes('<!DOCTYPE html>') || csvText.includes('google-signin') || csvText.includes('Sign in to your Google Account')) {
+    throw new Error('Acesso negado: a planilha precisa estar com acesso definido como "Qualquer pessoa com o link pode ler" no Google Sheets.');
+  }
+
   const rows = parseCSV(csvText);
 
   if (rows.length < 2) {
     throw new Error('A planilha está vazia ou contém apenas o cabeçalho.');
   }
 
-  // Header row
+  // Header row (normalize lowercase)
   const headers = rows[0].map(h => h.toLowerCase());
 
-  // Find column indices dynamically
-  const findCol = (keywords: string[]) => {
-    return headers.findIndex(h => keywords.some(k => h.includes(k)));
+  // Helper to check if a value looks like a date or time string
+  const isDateOrTime = (val: string) => /\d{1,2}\/\d{1,2}\/\d{2,4}/.test(val) || /\d{1,2}:\d{1,2}/.test(val);
+
+  // Helper to find column index matching keywords excluding specific indices
+  const findCol = (keywords: string[], excludeIndices: number[] = []) => {
+    return headers.findIndex((h, idx) => {
+      if (excludeIndices.includes(idx)) return false;
+      return keywords.some(k => h.includes(k));
+    });
   };
 
-  const nameIdx = findCol(['nome', 'produto', 'título', 'item']);
-  const categoryIdx = findCol(['categoria', 'tipo', 'seção']);
-  const priceIdx = findCol(['preço', 'preco', 'valor', 'r$']);
-  const originalPriceIdx = findCol(['original', 'de', 'antigo']);
-  const originIdx = findCol(['origem', 'artesão', 'artesao', 'parceiro', 'aldeia']);
-  const descIdx = findCol(['descrição', 'descricao', 'sobre']);
-  const ritualIdx = findCol(['ritual', 'uso', 'intenção', 'intencao', 'propósito']);
-  const imageIdx = findCol(['imagem', 'link', 'drive', 'foto', 'url']);
-  const inStockIdx = findCol(['estoque', 'disponível', 'disponivel']);
-  const featuredIdx = findCol(['destaque', 'estrela', 'vitrine']);
+  // Timestamp column (must NEVER be used for names or prices)
+  const timestampIdx = findCol(['carimbo', 'data/hora', 'timestamp', 'horário']);
+
+  const nameIdx = findCol(['nome do produto', 'nome', 'produto', 'título', 'item'], [timestampIdx]);
+  const categoryIdx = findCol(['categoria do produto', 'categoria', 'tipo', 'seção'], [timestampIdx]);
+  
+  // Specifically distinguish between discount/sale price and original price
+  const discountPriceIdx = findCol(['preço com desconto', 'preco com desconto', 'desconto', 'preço final', 'preco final'], [timestampIdx]);
+  const priceIdx = discountPriceIdx !== -1 
+    ? discountPriceIdx 
+    : headers.findIndex((h, idx) => {
+        if (idx === timestampIdx) return false;
+        if (h.includes('original') || h.includes('antigo') || h.includes('cheio')) return false;
+        return h.includes('preço') || h.includes('preco') || h.includes('valor');
+      });
+  
+  // Strictly detect Original Price - NEVER loose 'de' which matched 'carimbo de data/hora'
+  const originalPriceIdx = headers.findIndex((h, idx) => {
+    if (idx === timestampIdx || idx === priceIdx) return false;
+    return (
+      h.includes('preço original') ||
+      h.includes('preco original') ||
+      h.includes('valor original') ||
+      h.includes('preço anterior') ||
+      h.includes('preco anterior') ||
+      h.includes('preço de') ||
+      h.includes('preco de') ||
+      h.includes('preço cheio') ||
+      h.trim() === 'original'
+    );
+  });
+
+  const originIdx = findCol(['origem / artesão', 'origem / artesao', 'origem', 'artesão', 'artesao', 'parceiro', 'aldeia'], [timestampIdx]);
+  const descIdx = findCol(['descrição', 'descricao', 'sobre'], [timestampIdx]);
+  const ritualIdx = findCol(['uso ritual e intenção', 'uso ritual e intencao', 'uso ritual', 'ritual', 'intenção', 'intencao', 'propósito'], [timestampIdx]);
+  const imageIdx = findCol(['link imagem do drive', 'link imagem', 'imagem', 'link', 'drive', 'foto', 'url'], [timestampIdx]);
+  const inStockIdx = findCol(['em estoque', 'estoque', 'disponível', 'disponivel'], [timestampIdx]);
+  const featuredIdx = findCol(['vitrine', 'destaque', 'estrela'], [timestampIdx]);
+  const consecrationIdx = findCol([
+    'consagração', 'consagracao', 'consagrado', 'consagrada',
+    'bênção', 'bencao', 'rezo de consagração', 'rezo de consagracao',
+    'nota de consagração', 'nota de consagracao', 'consagrado no fogo'
+  ], [timestampIdx]);
+
+  const elementsIdx = findCol([
+    'matérias-primas', 'materias-primas', 'matéria prima', 'materia prima',
+    'matérias primas', 'materias primas', 'matéria-prima', 'materia-prima',
+    'matérias', 'materias', 'elementos', 'composição', 'composicao',
+    'ingredientes', 'materiais', 'feitio sagrado', 'origem confiável', 'origem confiavel'
+  ], [timestampIdx]);
 
   const parsedProducts: Product[] = [];
 
@@ -185,28 +267,47 @@ export async function fetchProductsFromSheet(sheetUrlOrId: string): Promise<Prod
     const rawCategory = categoryIdx !== -1 ? row[categoryIdx] : 'medicinas';
     const { id: catId, label: catLabel } = normalizeCategory(rawCategory);
 
-    // Price handling (e.g., "R$ 145,00" or "145.00" or "145")
-    const rawPrice = priceIdx !== -1 ? row[priceIdx] : '0';
-    const cleanPrice = parseFloat(rawPrice.replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
+    // Price handling (e.g., "1111", "R$ 145,00", "145.00" or "145")
+    const rawPrice = (priceIdx !== -1 && priceIdx !== timestampIdx) ? row[priceIdx] : '0';
+    const cleanPrice = !isDateOrTime(rawPrice)
+      ? (parseFloat(rawPrice.replace(/[^\d.,]/g, '').replace(',', '.')) || 0)
+      : 0;
 
-    const rawOriginalPrice = originalPriceIdx !== -1 ? row[originalPriceIdx] : '';
-    const cleanOriginalPrice = rawOriginalPrice 
-      ? parseFloat(rawOriginalPrice.replace(/[^\d.,]/g, '').replace(',', '.')) || undefined 
+    const rawOriginalPrice = (originalPriceIdx !== -1 && originalPriceIdx !== timestampIdx) ? row[originalPriceIdx] : '';
+    const cleanOriginalPrice = (
+      rawOriginalPrice && 
+      rawOriginalPrice.trim() !== '' && 
+      !isDateOrTime(rawOriginalPrice)
+    ) ? parseFloat(rawOriginalPrice.replace(/[^\d.,]/g, '').replace(',', '.')) || undefined 
       : undefined;
 
-    const origin = originIdx !== -1 ? row[originIdx] : 'Feitio Sagrado • Religare';
-    const description = descIdx !== -1 ? row[descIdx] : 'Instrumento de cura e conexão consagrado na Casa.';
-    const ritualUse = ritualIdx !== -1 ? row[ritualIdx] : 'Alinhamento energético, meditação e presença no altar sagrado.';
+    const origin = originIdx !== -1 && row[originIdx] ? row[originIdx] : 'Feitio Sagrado • Religare';
+    const description = descIdx !== -1 && row[descIdx] ? row[descIdx] : 'Instrumento de cura e conexão consagrado na Casa.';
+    const ritualUse = ritualIdx !== -1 && row[ritualIdx] ? row[ritualIdx] : 'Alinhamento energético, meditação e presença no altar sagrado.';
     
-    // Format Google Drive image
+    // Format Google Drive image (with automatic category fallback if blank or folder link)
     const rawImage = imageIdx !== -1 ? row[imageIdx] : '';
-    const imageUrl = formatDriveImageUrl(rawImage) || 'https://images.unsplash.com/photo-1544717302-de2939b7ef71?auto=format&fit=crop&w=800&q=80';
+    const imageUrl = formatDriveImageUrl(rawImage, catId);
 
     const rawInStock = inStockIdx !== -1 ? row[inStockIdx]?.toLowerCase() : 'sim';
     const inStock = !rawInStock.includes('não') && !rawInStock.includes('nao') && !rawInStock.includes('false') && !rawInStock.includes('0');
 
     const rawFeatured = featuredIdx !== -1 ? row[featuredIdx]?.toLowerCase() : 'não';
     const featured = rawFeatured.includes('sim') || rawFeatured.includes('true') || rawFeatured.includes('1');
+
+    // Consagração customizada pelo formulário
+    const rawConsecration = (consecrationIdx !== -1 && row[consecrationIdx]) ? row[consecrationIdx].trim() : '';
+    const consecrationNote = rawConsecration || 'Defumado com Breu e consagrado na 1ª Casa de Recife dirigida por mulheres.';
+
+    // Matérias-Primas customizadas pelo formulário (separadas por vírgula ou ponto e vírgula)
+    const rawElements = (elementsIdx !== -1 && row[elementsIdx]) ? row[elementsIdx].trim() : '';
+    let elements = ['Feitio Sagrado', 'Origem Confiável', 'Consagrado no Fogo'];
+    if (rawElements) {
+      const parsedElements = rawElements.split(/[,;\n|]/).map(s => s.trim()).filter(Boolean);
+      if (parsedElements.length > 0) {
+        elements = parsedElements;
+      }
+    }
 
     parsedProducts.push({
       id: `sheet-prod-${i}-${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
@@ -219,13 +320,13 @@ export async function fetchProductsFromSheet(sheetUrlOrId: string): Promise<Prod
       artisan: origin.trim(),
       description: description.trim(),
       ritualUse: ritualUse.trim(),
-      elements: ['Feitio Sagrado', 'Origem Confiável', 'Consagrado no Fogo'],
+      elements,
       imageUrl: imageUrl.trim(),
       inStock,
       featured,
       rating: 5.0,
       reviewsCount: 12 + (i % 25),
-      consecrationNote: 'Defumado com Breu e consagrado na 1ª Casa com direção 100% feminina.'
+      consecrationNote
     });
   }
 

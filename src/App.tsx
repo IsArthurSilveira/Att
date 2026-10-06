@@ -1,75 +1,69 @@
 import React, { useState, useEffect } from 'react';
-import { Product, CartItem } from './types';
-import { PRODUCTS } from './data/products';
+import { Product, CartItem, SacredEvent } from './types';
 import { fetchProductsFromSheet } from './services/sheetsService';
+import { fetchEventsFromSheet } from './services/eventsService';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { CategoriesSection } from './components/CategoriesSection';
+import { EventsSection } from './components/EventsSection';
 import { FooterSection } from './components/FooterSection';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { CartDrawer } from './components/CartDrawer';
-import { SheetsSyncModal } from './components/SheetsSyncModal';
-import { CheckCircle2, X, Sparkles } from 'lucide-react';
+import { CheckCircle2, X, Sparkles, Loader2 } from 'lucide-react';
+
+// Planilhas Google Oficiais fornecidas pela Casa Religare (Alimentadas diretamente pelos Formulários Google)
+export const DEFAULT_PRODUCTS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1mFwVn6VKz8402CRlMwTlRZI6BwGCGVbUz3idPBm0stU/edit?resourcekey=&gid=728455759#gid=728455759';
+export const DEFAULT_EVENTS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1gA8KICQmBEUmY4Bo4dup05IaRSBngWNUa-E0roDMi_s/edit?resourcekey=&gid=60686309#gid=60686309';
 
 export default function App() {
-  // Live dynamic products list (default or loaded from Google Sheets)
-  const [products, setProducts] = useState<Product[]>(PRODUCTS);
-  const [sheetUrl, setSheetUrl] = useState<string>(() => {
-    try {
-      return localStorage.getItem('religare_sheet_url') || '';
-    } catch {
-      return '';
-    }
-  });
-  const [isUsingCustomSheet, setIsUsingCustomSheet] = useState<boolean>(false);
-  const [isSyncModalOpen, setIsSyncModalOpen] = useState<boolean>(false);
+  // Dados reais carregados diretamente das Planilhas Google Oficiais
+  const [products, setProducts] = useState<Product[]>([]);
+  const [events, setEvents] = useState<SacredEvent[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Cart state with localStorage
+  // Cart state com persistência no localStorage
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     try {
       const saved = localStorage.getItem('floresta_sacola');
       if (saved) return JSON.parse(saved);
-    } catch (e) {
+    } catch {
       // ignore
     }
-    // Default initial cart item for immediate interactive onboarding
-    return [
-      { product: PRODUCTS[0], quantity: 1 }
-    ];
+    return [];
   });
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [currentView, setCurrentView] = useState<'home' | 'shop'>('home');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [showCheckoutSuccess, setShowCheckoutSuccess] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Attempt auto-sync from saved Google Sheet on startup
+  // Consulta automática das planilhas na inicialização
   useEffect(() => {
-    try {
-      const savedUrl = localStorage.getItem('religare_sheet_url');
-      if (savedUrl) {
-        fetchProductsFromSheet(savedUrl)
-          .then((loadedProducts) => {
-            if (loadedProducts.length > 0) {
-              setProducts(loadedProducts);
-              setIsUsingCustomSheet(true);
-            }
-          })
-          .catch((err) => {
-            console.warn('Could not auto-load sheet products on startup:', err);
-          });
+    setIsLoading(true);
+
+    Promise.allSettled([
+      fetchProductsFromSheet(DEFAULT_PRODUCTS_SHEET_URL),
+      fetchEventsFromSheet(DEFAULT_EVENTS_SHEET_URL)
+    ]).then(([productsResult, eventsResult]) => {
+      if (productsResult.status === 'fulfilled' && productsResult.value.length > 0) {
+        setProducts(productsResult.value);
       }
-    } catch (e) {
-      // ignore
-    }
+      if (eventsResult.status === 'fulfilled' && eventsResult.value.length > 0) {
+        setEvents(eventsResult.value);
+      }
+      setIsLoading(false);
+    }).catch(() => {
+      setIsLoading(false);
+    });
   }, []);
 
-  // Sync cart to localStorage
+  // Sincronização da sacola com o localStorage
   useEffect(() => {
     try {
       localStorage.setItem('floresta_sacola', JSON.stringify(cartItems));
-    } catch (e) {
+    } catch {
       // ignore
     }
   }, [cartItems]);
@@ -79,30 +73,6 @@ export default function App() {
     setTimeout(() => {
       setToastMessage(null);
     }, 4000);
-  };
-
-  const handleProductsLoaded = (newProducts: Product[], url: string) => {
-    setProducts(newProducts);
-    setSheetUrl(url);
-    setIsUsingCustomSheet(true);
-    try {
-      localStorage.setItem('religare_sheet_url', url);
-    } catch {
-      // ignore
-    }
-    showToast(`✨ ${newProducts.length} produtos carregados da sua Planilha Google!`);
-  };
-
-  const handleResetToDefault = () => {
-    setProducts(PRODUCTS);
-    setSheetUrl('');
-    setIsUsingCustomSheet(false);
-    try {
-      localStorage.removeItem('religare_sheet_url');
-    } catch {
-      // ignore
-    }
-    showToast('Catálogo padrão restaurado com sucesso.');
   };
 
   const handleAddToCart = (product: Product, quantity = 1) => {
@@ -171,33 +141,85 @@ export default function App() {
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
         products={products}
-        onOpenSyncModal={() => setIsSyncModalOpen(true)}
-        isUsingCustomSheet={isUsingCustomSheet}
+        currentView={currentView}
+        onNavigate={(view) => {
+          setCurrentView(view);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
       />
 
-      {/* Main E-commerce View */}
+      {/* Main Content Area */}
       <main className="flex-1">
-        <HeroSection
-          onExploreCatalog={() => {
-            const el = document.getElementById('catalogo');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
-        />
+        {isLoading ? (
+          <div className="min-h-[55vh] flex flex-col items-center justify-center p-8 space-y-4 text-center">
+            <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#DFB168] shadow-lg animate-pulse bg-[#162119]">
+              <img src="/religare-logo.jpg" alt="Religare" className="w-full h-full object-cover" />
+            </div>
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-center gap-2 text-sm font-semibold text-[#DFB168] font-cinzel">
+                <Loader2 className="w-4 h-4 animate-spin text-[#DFB168]" />
+                <span>Carregando Acervo Religare...</span>
+              </div>
+              <p className="text-xs text-[#A69986]">
+                Conectando em tempo real com as planilhas oficiais de produtos e vivências.
+              </p>
+            </div>
+          </div>
+        ) : (
+          currentView === 'home' ? (
+            <>
+              <HeroSection
+                onExploreCatalog={() => {
+                  setCurrentView('shop');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
 
-        {/* Featured Catalog & Interactive Categories */}
-        <CategoriesSection
-          products={products}
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-          onSelectProduct={(product) => setSelectedProduct(product)}
-          onAddToCart={(product) => handleAddToCart(product)}
-          isUsingCustomSheet={isUsingCustomSheet}
-          onOpenSyncModal={() => setIsSyncModalOpen(true)}
-        />
+              {/* Categories & Products on Home (limited to 5 per category) */}
+              <CategoriesSection
+                products={products}
+                selectedCategory={selectedCategory}
+                onSelectCategory={setSelectedCategory}
+                onSelectProduct={(product) => setSelectedProduct(product)}
+                onAddToCart={(product) => handleAddToCart(product)}
+                isFullShopView={false}
+                onOpenFullShop={() => {
+                  setCurrentView('shop');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+
+              {/* Sacred Events & Experiences of the Month */}
+              <EventsSection
+                events={events}
+              />
+            </>
+          ) : (
+            /* Dedicated E-commerce Shop View (all products, search, filters) */
+            <CategoriesSection
+              products={products}
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+              onSelectProduct={(product) => setSelectedProduct(product)}
+              onAddToCart={(product) => handleAddToCart(product)}
+              isFullShopView={true}
+              onBackToHome={() => {
+                setCurrentView('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+          )
+        )}
       </main>
 
       {/* Footer Section */}
-      <FooterSection onOpenSyncModal={() => setIsSyncModalOpen(true)} />
+      <FooterSection 
+        onNavigate={(view) => {
+          setCurrentView(view);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onSelectCategory={setSelectedCategory}
+      />
 
       {/* Product Detail Modal */}
       <ProductDetailModal
@@ -214,17 +236,6 @@ export default function App() {
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onCheckout={handleCheckout}
-      />
-
-      {/* Google Sheets & Forms Sync Modal */}
-      <SheetsSyncModal
-        isOpen={isSyncModalOpen}
-        onClose={() => setIsSyncModalOpen(false)}
-        onProductsLoaded={handleProductsLoaded}
-        onResetToDefault={handleResetToDefault}
-        currentSheetUrl={sheetUrl}
-        isUsingCustomSheet={isUsingCustomSheet}
-        productCount={products.length}
       />
 
       {/* Checkout WhatsApp Confirmation Modal */}
@@ -264,7 +275,7 @@ export default function App() {
               </div>
               <div className="flex justify-between text-[#A69986]">
                 <span>Equipe Responsável:</span>
-                <span className="text-[#DFB168] font-semibold">Guiança 100% Feminina</span>
+                <span className="text-[#DFB168] font-semibold">Dirigida por Mulheres</span>
               </div>
               <div className="flex justify-between text-[#A69986]">
                 <span>Itens Reservados:</span>
