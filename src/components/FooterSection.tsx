@@ -138,7 +138,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
             <div className="space-y-2.5 text-xs text-[#8C8070]">
               <div className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-[#DFB168] shrink-0 mt-0.5" />
-                <span>Envios para Recife e Região • Casa de Cura</span>
+                <span>Entregas para Todo o Brasil • Sedex e Correios</span>
               </div>
               <div className="flex items-start gap-2">
                 <MessageCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />

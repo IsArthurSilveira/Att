@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Product } from '../types';
-import { X, Star, ShieldCheck, Heart, Sparkles, MapPin, Feather, Check, MessageCircle } from 'lucide-react';
+import { X, Star, ShieldCheck, Heart, Sparkles, MapPin, Feather, Check, MessageCircle, Truck } from 'lucide-react';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -92,6 +92,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   R$ {product.originalPrice.toFixed(2).replace('.', ',')}
                 </span>
               )}
+            </div>
+
+            <div className="flex items-center gap-1.5 text-[11px] text-[#A69986] p-2 rounded-lg bg-[#141B16] border border-[#233226]">
+              <Truck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span className="text-emerald-400 font-semibold">Entrega em todo o Brasil</span>
+              <span className="text-[#6E6457]">•</span>
+              <span className="text-[#A69986]">Envio seguro via Sedex / Correios</span>
             </div>
 
             <p className="text-xs sm:text-sm text-[#D3C7B2] leading-relaxed">

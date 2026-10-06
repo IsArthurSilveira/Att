@@ -264,7 +264,7 @@ export default function App() {
                 Os itens da sua sacola foram formatados e abertos no WhatsApp oficial da Religare: <strong className="text-[#DFB168]">(81) 97914-9067</strong>.
               </p>
               <p className="text-[11px] text-[#8C8070] leading-relaxed">
-                Basta clicar em <strong>Enviar</strong> no WhatsApp para que nossa equipe feminina combine o frete e passe a chave PIX ou link de pagamento.
+                Basta clicar em <strong>Enviar</strong> no WhatsApp para que nossa equipe feminina combine o frete (entregamos em todo o Brasil) e passe a chave PIX ou link de pagamento.
               </p>
             </div>
 

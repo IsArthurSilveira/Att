@@ -206,7 +206,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   </span>
                 )}
               </div>
-              <span className="text-[9px] text-[#8C8070] block truncate">Recife e Região</span>
+              <span className="text-[9px] text-[#8C8070] block truncate">Entrega em todo o Brasil</span>
             </div>
 
             <button
@@ -280,7 +280,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                 Todas as Medicinas & Feitios da Floresta
               </h2>
               <p className="text-[#A69986] text-xs sm:text-sm md:text-base leading-relaxed">
-                Navegue pelo acervo completo com Tepis e Kuripes da Sopro Imperial, rapés ancestrais, sananga viva e velas ecológicas da Lumiar para Recife e região.
+                Navegue pelo acervo completo com Tepis e Kuripes da Sopro Imperial, rapés ancestrais, sananga viva e velas ecológicas da Lumiar com entrega em todo o Brasil.
               </p>
             </div>
 

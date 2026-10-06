@@ -51,7 +51,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     });
 
     msg += `\n💰 *VALOR TOTAL DOS ITENS:* R$ ${total.toFixed(2).replace('.', ',')}\n`;
-    msg += `📦 *Envio:* A calcular via Correios / Sedex / Transportadora\n\n`;
+    msg += `📦 *Envio:* A calcular (Entrega em todo o Brasil via Sedex / Correios / Transportadora)\n\n`;
     msg += `Olá, equipe Religare! Acabei de montar minha sacola no site e gostaria de concluir meu pedido. Poderiam me passar os dados para pagamento (PIX / Cartão) e o valor do frete? Gratidão! 🙏🌸`;
 
     return encodeURIComponent(msg);
@@ -208,7 +208,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     />
                     <input
                       type="text"
-                      placeholder="Sua cidade / CEP"
+                      placeholder="Cidade / Estado ou CEP"
                       value={customerLocation}
                       onChange={(e) => setCustomerLocation(e.target.value)}
                       className="w-full px-2.5 py-1.5 rounded-lg bg-[#141B16] border border-[#2B3B2F] text-xs text-[#F1ECE1] placeholder-[#6D6354] focus:outline-none focus:border-[#DFB168]"
@@ -231,7 +231,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>Envio Sagrado:</span>
+                  <span>Entrega em todo Brasil:</span>
                   <span className="text-emerald-400 font-semibold text-[11px]">Calculado via WhatsApp</span>
                 </div>
                 <div className="pt-1.5 border-t border-[#233226] flex items-center justify-between text-xs sm:text-sm font-bold text-[#F1ECE1]">
