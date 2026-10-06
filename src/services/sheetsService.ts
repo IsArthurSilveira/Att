@@ -12,10 +12,6 @@ function getDefaultCategoryImage(categoryId: string): string {
       return 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80';
     case 'velas':
       return 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=800&q=80';
-    case 'ervas':
-      return 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80';
-    case 'artes':
-      return 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=800&q=80';
     default:
       return 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80';
   }
@@ -119,12 +115,6 @@ function normalizeCategory(rawCategory: string): { id: string; label: string } {
   }
   if (lower.includes('vela') || lower.includes('lumiar')) {
     return { id: 'velas', label: 'Velas Rituais' };
-  }
-  if (lower.includes('erva') || lower.includes('defuma') || lower.includes('breu') || lower.includes('tuana') || lower.includes('flor')) {
-    return { id: 'ervas', label: 'Ervas & Defumações' };
-  }
-  if (lower.includes('marac') || lower.includes('arte') || lower.includes('guia')) {
-    return { id: 'artes', label: 'Artes dos Guias & Maracás' };
   }
 
   // If user entered a custom name (e.g. "teste" or custom section)

@@ -39,7 +39,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base md:text-lg text-[#C7BCAB] font-normal leading-relaxed max-w-2xl mx-auto font-sans-clean">
-            Pioneira em Recife como a primeira casa cerimonial dirigida por mulheres. Unimos acolhimento humanizado, respeito, escuta e amor à força dos instrumentos sagrados (Sopro Imperial), rapés tradicionais, sananga viva e velas rituais da Lumiar.
+            Espaço de cura espiritual e acolhimento guiado pela força feminina, promovendo autoconhecimento e expansão da consciência através da reconexão ancestral com a natureza para a transformação mental, emocional e espiritual.
           </p>
 
           {/* Direct e-commerce CTA with radiant golden button (Matching the sacred gold palette) */}

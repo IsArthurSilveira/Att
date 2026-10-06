@@ -13,8 +13,6 @@ import {
   ShoppingBag, 
   Wind, 
   Flame, 
-  Flower2, 
-  Music, 
   Layers
 } from 'lucide-react';
 
@@ -60,10 +58,6 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
         return <Flame className="w-4 h-4 text-[#DFB168]" />;
       case 'velas':
         return <Flame className="w-4 h-4 text-amber-300" />;
-      case 'ervas':
-        return <Flower2 className="w-4 h-4 text-emerald-300" />;
-      case 'artes':
-        return <Music className="w-4 h-4 text-rose-400" />;
       default:
         return <Layers className="w-4 h-4 text-[#DFB168]" />;
     }
@@ -78,10 +72,6 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
         return 'Rapés tradicionais lunares e sananga viva da floresta';
       case 'velas':
         return 'Cera 100% vegetal consagrada da alma • Lumiar';
-      case 'ervas':
-        return 'Defumações e resinas puras • Tuana Flores';
-      case 'artes':
-        return 'Maracás cerimoniais e artes sagradas dos guias';
       default:
         return 'Acervo consagrado na Casa de Cura';
     }
@@ -290,7 +280,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                 Todas as Medicinas & Feitios da Floresta
               </h2>
               <p className="text-[#A69986] text-xs sm:text-sm md:text-base leading-relaxed">
-                Navegue pelo acervo completo com Tepis e Kuripes da Sopro Imperial, rapés ancestrais, sananga viva, velas da Lumiar e defumações de Tuana Flores para Recife e região.
+                Navegue pelo acervo completo com Tepis e Kuripes da Sopro Imperial, rapés ancestrais, sananga viva e velas ecológicas da Lumiar para Recife e região.
               </p>
             </div>
 

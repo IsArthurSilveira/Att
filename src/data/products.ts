@@ -5,8 +5,6 @@ export const CATEGORIES = [
   { id: 'sopro', label: 'Tepis & Kuripes' },
   { id: 'medicinas', label: 'Rapés & Sananga' },
   { id: 'velas', label: 'Velas Rituais' },
-  { id: 'ervas', label: 'Ervas & Defumações' },
-  { id: 'artes', label: 'Artes dos Guias & Maracás' },
 ] as const;
 
 export const PRODUCTS: Product[] = [
@@ -143,82 +141,5 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewsCount: 22,
     consecrationNote: 'Vela energizada no altar principal da Casa com rezo de proteção.'
-  },
-
-  // --- ERVAS & DEFUMAÇÕES (Tuana Flores & Amigos Mensageiros) ---
-  {
-    id: 'feixe-defumacao-tuana-flores',
-    name: 'Feixe de Ervas & Flores Secas para Defumação Sagrada',
-    category: 'ervas',
-    categoryLabel: 'Ervas & Defumações',
-    price: 45.00,
-    origin: 'Colheita e arranjo orgânico por Tuana Flores',
-    artisan: 'Tuana Flores • Colheita Consciente',
-    description: 'Bastão artesanal composto por sálvia branca, alecrim do campo, lavanda e pétalas de rosas perfumadas. Perfeito para limpeza energética de casas, consultórios e espaços cerimoniais.',
-    ritualUse: 'Defumação de ambientes, purificação de campos áuricos e atração de frequências de harmonia.',
-    elements: ['Sálvia Branca Cultivada', 'Alecrim Orgânico', 'Pétalas de Rosas', 'Fio de Algodão'],
-    imageUrl: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80',
-    inStock: true,
-    featured: true,
-    rating: 5.0,
-    reviewsCount: 47,
-    consecrationNote: 'Seco naturalmente à sombra para preservar a riqueza dos óleos das plantas.'
-  },
-  {
-    id: 'breu-branco-amazonia',
-    name: 'Resina Viva de Breu Branco da Amazônia Profunda (100g)',
-    category: 'ervas',
-    categoryLabel: 'Ervas & Defumações',
-    price: 64.00,
-    origin: 'Reserva Agroflorestal da Amazônia / Amigos Mensageiros',
-    artisan: 'Coleta sustentável por famílias ribeirinhas',
-    description: 'Resina vegetal nativa com aroma cítrico, amadeirado e balsâmico incomparável. Considerado o incenso originário mais potente do Brasil para dissipar energias densas.',
-    ritualUse: 'Defumação no carvão antes de cerimônias, meditações e limpeza de instrumentos sagrados.',
-    elements: ['100% Resina de Breu Branco Puro', 'Sem Aditivos Químicos'],
-    imageUrl: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80',
-    inStock: true,
-    featured: false,
-    rating: 4.9,
-    reviewsCount: 39,
-    consecrationNote: 'Extraído sem machucar o tronco da árvore.'
-  },
-
-  // --- ARTES SACRAS & MARACÁS ---
-  {
-    id: 'maraca-cerimonial-xamanica',
-    name: 'Maracá Cerimonial de Cabaça & Sementes de Reza',
-    category: 'artes',
-    categoryLabel: 'Artes dos Guias & Maracás',
-    price: 260.00,
-    originalPrice: 290.00,
-    origin: 'Povo Huni Kuin (Kaxinawá) - AC',
-    artisan: 'Feito à mão por mestres artesãos indígenas',
-    description: 'Instrumento tradicional de ritmo e invocação, feito em cabaça curada com cabo em madeira e sementes sagradas internas que produzem o som do sopro da mata.',
-    ritualUse: 'Condução de cantos, firmeza de rodas de oração e limpeza áurica.',
-    elements: ['Cabaça Selvagem', 'Sementes Sagradas', 'Penas de Muda Natural Ética'],
-    imageUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80',
-    inStock: true,
-    featured: false,
-    rating: 4.8,
-    reviewsCount: 26,
-    consecrationNote: 'Afinado harmonicamente para elevar o padrão vibratório do ambiente.'
-  },
-  {
-    id: 'escultura-guia-espiritual-ceramica',
-    name: 'Escultura Sacra Guia de Cura em Argila Queimada',
-    category: 'artes',
-    categoryLabel: 'Artes dos Guias & Maracás',
-    price: 210.00,
-    origin: 'Artesanato devocional dos guias espirituais da Casa',
-    artisan: 'Ateliê Sagrado da Casa',
-    description: 'Escultura em terracota modelada manualmente representando as forças de guiança e acolhimento espiritual. Cada detalhe carrega reverência aos mentores e protetores da egrégora.',
-    ritualUse: 'Ponto focal de ancoramento e oração no altar pessoal.',
-    elements: ['Argila Natural', 'Pigmentos Minerais', 'Queima em Alta Temperatura'],
-    imageUrl: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80',
-    inStock: true,
-    featured: false,
-    rating: 5.0,
-    reviewsCount: 19,
-    consecrationNote: 'Peça exclusiva e numerada, benzida no altar da Casa de Cura.'
   }
 ];

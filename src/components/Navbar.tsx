@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Menu, X, Sparkles, ChevronRight, Wind, Flame, Flower2, Music, Layers, FileSpreadsheet, Home, Store, Calendar } from 'lucide-react';
+import { ShoppingBag, Menu, X, Sparkles, ChevronRight, Wind, Flame, Layers, FileSpreadsheet, Home, Store, Calendar } from 'lucide-react';
 import { CartItem, Product } from '../types';
 import { CATEGORIES } from '../data/products';
 
@@ -72,10 +72,6 @@ export const Navbar: React.FC<NavbarProps> = ({
         return <Flame className="w-4 h-4 text-[#DFB168]" />;
       case 'velas':
         return <Flame className="w-4 h-4 text-amber-300" />;
-      case 'ervas':
-        return <Flower2 className="w-4 h-4 text-emerald-300" />;
-      case 'artes':
-        return <Music className="w-4 h-4 text-rose-400" />;
       default:
         return <Sparkles className="w-4 h-4 text-[#DFB168]" />;
     }
@@ -92,10 +88,6 @@ export const Navbar: React.FC<NavbarProps> = ({
         return 'Rapés tradicionais lunares e sananga viva';
       case 'velas':
         return 'Cera 100% vegetal da alma • Lumiar';
-      case 'ervas':
-        return 'Defumações e resinas puras • Tuana Flores';
-      case 'artes':
-        return 'Maracás cerimoniais e artes sagradas dos guias';
       default:
         return '';
     }

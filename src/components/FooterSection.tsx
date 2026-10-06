@@ -118,22 +118,6 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                   Velas Rituais (Lumiar)
                 </button>
               </li>
-              <li>
-                <button 
-                  onClick={() => handleCategoryClick('ervas')} 
-                  className="hover:text-[#DFB168] transition-colors cursor-pointer text-left block"
-                >
-                  Ervas & Defumações (Tuana Flores)
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => handleCategoryClick('artes')} 
-                  className="hover:text-[#DFB168] transition-colors cursor-pointer text-left block"
-                >
-                  Artes dos Guias & Maracás
-                </button>
-              </li>
               <li className="pt-1.5 pb-1">
                 <button 
                   onClick={handleEventsClick} 

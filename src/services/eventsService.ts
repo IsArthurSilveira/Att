@@ -117,7 +117,7 @@ export async function fetchEventsFromSheet(sheetUrlOrId: string): Promise<Sacred
     }
 
     const rawImage = imageIdx !== -1 ? row[imageIdx] : '';
-    const imageUrl = rawImage ? formatDriveImageUrl(rawImage, 'artes') : DEFAULT_EVENT_IMAGE;
+    const imageUrl = rawImage ? formatDriveImageUrl(rawImage, 'medicinas') : DEFAULT_EVENT_IMAGE;
 
     const rawHighlight = highlightIdx !== -1 && row[highlightIdx] ? row[highlightIdx].toLowerCase() : '';
     const highlight = rawHighlight.includes('sim') || rawHighlight.includes('true') || rawHighlight.includes('1');
