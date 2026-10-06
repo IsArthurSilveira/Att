@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Mail, MessageCircle, ShieldCheck, Check, Send, ShoppingBag, FileSpreadsheet, Calendar } from 'lucide-react';
+import { MapPin, Mail, MessageCircle, Instagram, ShieldCheck, Check, Send, ShoppingBag, FileSpreadsheet, Calendar } from 'lucide-react';
 
 interface FooterSectionProps {
   onNavigate?: (view: 'home' | 'shop') => void;
@@ -149,6 +149,17 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                   className="hover:text-[#F1ECE1] transition-colors"
                 >
                   WhatsApp da Casa: (81) 97914-9067
+                </a>
+              </div>
+              <div className="flex items-start gap-2">
+                <Instagram className="w-3.5 h-3.5 text-[#DFB168] shrink-0 mt-0.5" />
+                <a
+                  href="https://www.instagram.com/3religare?stkn=MTExcml3cHh0cGJkdg=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#F1ECE1] transition-colors"
+                >
+                  Instagram: @3religare
                 </a>
               </div>
               <div className="flex items-start gap-2">
